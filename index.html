@@ -209,10 +209,20 @@ tr.score-today td{color:#ff929b;font-weight:750;background:#3a2539}
    
 .game-guide h3{margin:13px 0 4px;color:#ffdb54;font-size:1rem}
    
-.game-guide p,.game-guide ul{margin:4px 0 9px;text-align:left;color:#e8efff}
+.game-guide p,.game-guide ul{margin:4px 0 9px;color:#e8efff}
+.game-guide p,.game-guide li{text-align:justify;text-justify:inter-word;hyphens:auto}
    
 .game-guide li{margin:3px 0}/* Duell: getrennte, gut lesbare Bonusanzeigen für beide Spieler. */
 #p1Combo,#p2Combo{color:#ffdb54;font-weight:900;font-variant-numeric:tabular-nums}
+
+/* Informationsbereich: keine Änderung der Spiellogik. */
+.legal-info{max-width:980px;margin:12px auto;text-align:left;line-height:1.5}
+.legal-info summary{cursor:pointer;color:#ffdb54;font-weight:800}
+.legal-info h3{font-size:1rem;color:#ffdb54;margin:12px 0 4px}
+.legal-info p{margin:4px 0 9px;text-align:justify;text-justify:inter-word;hyphens:auto}
+#splash .legal-info{font-size:12px;max-height:28vh;overflow:auto;margin-top:12px;padding:8px 10px;border:1px solid #62749a;border-radius:8px}
+#splash .legal-info summary{font-size:13px}
+#splash .legal-info p{color:#fff}
 </style>
  </head>
  <body>
@@ -239,6 +249,18 @@ tr.score-today td{color:#ff929b;font-weight:750;background:#3a2539}
     <p class="muted">
      Retro Racing · 60 Sekunden · Sammle Coins!
     </p>
+    <details class="legal-info">
+ <summary>⚠️ Sicherheit, Alter, Haftung &amp; Urheberrecht</summary>
+ <h3>Altersinformation</h3>
+ <p>Coin Racer ist ein kostenloses Schulprojekt mit stilisierten Rennspielgrafiken. Es liegt keine offizielle USK-Altersfreigabe vor. „FSK“ ist die Kennzeichnung für Filme und nicht die Altersfreigabe dieses Spiels. Eltern sollten die Eignung für jüngere Kinder selbst beurteilen.</p>
+ <h3>Gesundheit / fotosensible Epilepsie</h3>
+ <p>Bewegte Bilder, Farbwechsel und visuelle Effekte können bei empfindlichen Personen Beschwerden und in seltenen Fällen epileptische Anfälle auslösen. Bei Schwindel, Übelkeit, Augenbeschwerden oder Unwohlsein das Spiel sofort beenden. Bei bekannter Fotosensibilität ärztlichen Rat beachten.</p>
+ <h3>Geräte und technische Nutzung</h3>
+ <p>Das Spiel wurde nicht auf allen Smartphones, Tablets, PCs und Browsern getestet. Es wird ohne Zusicherung einer jederzeit fehlerfreien Funktion bereitgestellt. Eine Haftung für Schäden wird nur im gesetzlich zulässigen Umfang ausgeschlossen; gesetzlich zwingende Haftungsansprüche bleiben unberührt.</p>
+ <h3>Eigenständiges Schulprojekt / Ähnlichkeiten</h3>
+ <p>Coin Racer ist ein individuell gestaltetes Schulprojekt von Amanda Köhn, entwickelt mit Unterstützung von KI-Werkzeugen. Es orientiert sich am allgemeinen Genre klassischer Arcade-Rennspiele. Ähnlichkeiten in Spielprinzipien bedeuten keine beabsichtigte Übernahme fremder geschützter Grafiken, Marken oder Programmdateien. Eine rechtliche Prüfung aller möglichen Ähnlichkeiten wurde nicht vorgenommen.</p>
+ <p><small>Diese Hinweise sind keine amtliche Altersfreigabe und ersetzen keine rechtliche Beratung.</small></p>
+</details>
    </div>
   </div>
   <main>
@@ -380,6 +402,20 @@ tr.score-today td{color:#ff929b;font-weight:750;background:#3a2539}
     <small style="display:block;text-align:center;margin-top:6px">
      Namen bleiben auf diesem Gerät gespeichert. Zurücksetzen löscht keine Highscores.
     </small>
+   </section>
+   <section class="panel legal-info">
+    <details class="legal-info">
+ <summary>⚠️ Sicherheit, Alter, Haftung &amp; Urheberrecht</summary>
+ <h3>Altersinformation</h3>
+ <p>Coin Racer ist ein kostenloses Schulprojekt mit stilisierten Rennspielgrafiken. Es liegt keine offizielle USK-Altersfreigabe vor. „FSK“ ist die Kennzeichnung für Filme und nicht die Altersfreigabe dieses Spiels. Eltern sollten die Eignung für jüngere Kinder selbst beurteilen.</p>
+ <h3>Gesundheit / fotosensible Epilepsie</h3>
+ <p>Bewegte Bilder, Farbwechsel und visuelle Effekte können bei empfindlichen Personen Beschwerden und in seltenen Fällen epileptische Anfälle auslösen. Bei Schwindel, Übelkeit, Augenbeschwerden oder Unwohlsein das Spiel sofort beenden. Bei bekannter Fotosensibilität ärztlichen Rat beachten.</p>
+ <h3>Geräte und technische Nutzung</h3>
+ <p>Das Spiel wurde nicht auf allen Smartphones, Tablets, PCs und Browsern getestet. Es wird ohne Zusicherung einer jederzeit fehlerfreien Funktion bereitgestellt. Eine Haftung für Schäden wird nur im gesetzlich zulässigen Umfang ausgeschlossen; gesetzlich zwingende Haftungsansprüche bleiben unberührt.</p>
+ <h3>Eigenständiges Schulprojekt / Ähnlichkeiten</h3>
+ <p>Coin Racer ist ein individuell gestaltetes Schulprojekt von Amanda Köhn, entwickelt mit Unterstützung von KI-Werkzeugen. Es orientiert sich am allgemeinen Genre klassischer Arcade-Rennspiele. Ähnlichkeiten in Spielprinzipien bedeuten keine beabsichtigte Übernahme fremder geschützter Grafiken, Marken oder Programmdateien. Eine rechtliche Prüfung aller möglichen Ähnlichkeiten wurde nicht vorgenommen.</p>
+ <p><small>Diese Hinweise sind keine amtliche Altersfreigabe und ersetzen keine rechtliche Beratung.</small></p>
+</details>
    </section>
    <details class="panel game-guide" id="gameGuide">
     <summary>
