@@ -1,114 +1,994 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coin Racer – Amanda Edition 4.1</title><style>
-:root{font-family:system-ui,Arial,sans-serif;color:#f5f7ff;background:#101522}*{box-sizing:border-box}body{margin:0;padding:14px}main{max-width:980px;margin:auto}h1{text-align:center;color:#ffdb54;letter-spacing:2px;margin:8px}p{text-align:center;color:#bfc9dd}.panel{background:#202b42;border:1px solid #52627f;border-radius:14px;padding:14px;margin:12px 0}.row{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap}label{font-weight:600}select,input,button{font:inherit;background:#34435f;border:1px solid #7888a4;border-radius:8px;color:white;padding:9px}button{cursor:pointer;font-weight:700}button.primary{background:#ffce35;color:#1c2332;border:0}button:disabled{opacity:.45;cursor:default}canvas{display:block;width:min(100%,600px);height:auto;margin:auto;border:4px solid #687895;border-radius:10px;touch-action:none}.hud{display:flex;justify-content:space-around;gap:6px;flex-wrap:wrap;font-weight:bold;margin-bottom:10px}.controls{display:flex;justify-content:center;gap:12px;margin:12px}.controls button{font-size:26px;width:100px;touch-action:none;user-select:none}.hidden{display:none!important}#message{text-align:center;color:#ffda62;font-weight:700;min-height:24px;margin:10px}table{width:100%;border-collapse:collapse}th,td{padding:9px 5px;text-align:left;border-bottom:1px solid #44536d}th{color:#ffdc61}input{width:85px;text-align:center;text-transform:uppercase}#initials{width:235px;max-width:100%;text-transform:none;text-align:left}small{color:#b9c7dd}h2{margin:4px 0 12px}#turnNotice{text-align:center;color:#8fe0ff;font-weight:700;margin:6px}.tag{display:inline-block;background:#354865;border-radius:8px;padding:5px 8px}#versusResult{font-weight:700;color:#ffdf73;text-align:center}#splash{position:fixed;inset:0;background:radial-gradient(circle at center,#243c67,#090d19 75%);z-index:20;display:flex;align-items:center;justify-content:center;padding:18px;text-align:center}#splash .inner{border:5px double #ffda54;padding:30px 22px;border-radius:18px;max-width:440px;width:100%;box-shadow:0 0 45px #ffce3544}#splash h2{font-size:clamp(30px,9vw,55px);color:#ffda54;text-shadow:3px 3px #b53c65;margin:12px 0}#splash p{color:#fff}#splash button{font-size:20px;padding:15px 25px}#carPreview{display:inline-block;font-size:32px} .muted{font-size:12px;color:#b9c7dd} .filebtn{display:inline-block;padding:9px;background:#34435f;border:1px solid #7888a4;border-radius:8px;cursor:pointer}#importFile{display:none}.game-layout{display:flex;align-items:flex-start;justify-content:center;gap:16px;max-width:820px;margin:0 auto}.game-road{flex:1 1 0;min-width:0;max-width:600px}.game-road canvas{width:100%}.game-sidebar{flex:0 0 174px;display:flex;flex-direction:column;gap:12px;position:sticky;top:18px;padding-top:14px}.game-sidebar #start{width:100%;padding:16px 10px;font-size:17px;line-height:1.3}.game-sidebar small{text-align:center;line-height:1.5}@media(max-width:640px){.game-layout{flex-direction:column;align-items:stretch;gap:10px}.game-road{width:100%;max-width:600px;margin:0 auto}.game-sidebar{order:-1;position:static;padding:0;flex:0 0 auto;align-items:center}.game-sidebar #start{width:min(100%,340px)}.game-sidebar small{display:none}}</style></head><body><div id="splash"><div class="inner"><div style="font-size:52px">🏎️ 🪙 🏁</div><h2>COIN RACER</h2><p style="font-weight:bold;color:#ffdb54">...by Amanda Köhn</p><p>AMANDA EDITION · 4.1 · Version 14</p><p>3 Strecken · 3 Level · 2 Spieler · 1.000 Highscores</p><button class="primary" id="enterArcade">▶ WEITER ZU DEN EINSTELLUNGEN</button><p class="muted">Retro Racing · 60 Sekunden · Sammle Coins!</p></div></div><main><h1>🏎️ COIN RACER 4.1</h1><p style="margin:0 0 12px;color:#ffdb54;font-weight:700;letter-spacing:1px">...by Amanda Köhn</p><p>Retro-Rennspiel · Münzen · Bonussterne · Hindernisse · Highscores</p><section class="panel"><div class="row"><label>Strecke <select id="track"><option value="classic">🛣️ Landstraße</option><option value="desert">🏜️ Wüste</option><option value="night">🌃 Nachtstadt</option></select></label><label>Schwierigkeit <select id="difficulty"><option value="easy">Leicht</option><option value="normal" selected>Mittel</option><option value="hard">Schwer</option></select></label><label>Rennwagen <select id="car"><option value="blue">🔵 Blitzblau</option><option value="red">🔴 Feuerrot</option><option value="green">🟢 Turbo-Grün</option><option value="gold">🟡 Goldflitzer</option></select></label><label>Modus <select id="mode"><option value="solo">1 Spieler</option><option value="versus">2 Spieler (2 × 3 Spuren · PC/Laptop)</option></select></label></div><div class="row" style="margin-top:12px"><label>Start-Countdown <select id="countdownSeconds"><option value="3">3 Sekunden</option><option value="5" selected>5 Sekunden</option></select></label><button id="sound">🔊 Ton an</button><button id="motor">🏎️ Motor an</button><button id="testSound">🔔 Ton testen</button><label style="font-size:13px">Motorlautstärke <input id="motorLevel" type="range" min="0" max="100" value="35" style="width:110px;vertical-align:middle;accent-color:#ffce35"><span id="motorPercent">35%</span></label></div></section><section class="panel"><div id="turnNotice">Bereit zum Start</div><div id="duelHud" class="hidden" style="display:flex;justify-content:space-around;gap:12px;font-weight:700;margin:8px 0"><span>🔵 Spieler 1 (A/D): <span id="p1Score">0</span> · ❤️ <span id="p1Lives">3</span></span><span>🔴 Spieler 2 (←/→): <span id="p2Score">0</span> · ❤️ <span id="p2Lives">3</span></span></div><div class="hud"><span>🪙 <span id="score">0</span></span><span>⏱ <span id="time">60</span> s</span><span>❤️ <span id="lives">3</span></span><span>🪙 Coins: <span id="collected">0</span>/10</span><span>⭐ <span id="combo">x1</span></span></div><div class="game-layout"><div class="game-road"><canvas id="game" width="520" height="720" aria-label="Arcade-Rennspiel"></canvas></div><aside class="game-sidebar"><button class="primary" id="start">▶ Spiel starten</button><small>Spiel starten oder neu starten, ohne nach oben zu scrollen.</small></aside></div><div id="message">Wähle Strecke, Level und Spielmodus.</div><div class="controls"><button id="left" aria-label="Nach links fahren">◀</button><div id="countdownBelow" aria-live="off" style="min-width:125px;text-align:center;font-size:27px;font-weight:900;color:#ffdb54;align-self:center;white-space:nowrap;background:#202b42;border:1px solid #52627f;border-radius:10px;padding:9px 4px">&nbsp;</div><button id="right" aria-label="Nach rechts fahren">▶</button></div><p><small>Pfeiltasten oder A/D · Mobil: Tasten gedrückt halten · Coins +1, +5, +10, +25, +50, +100 oder +250 · Stern +300 · Gestaffelte Zeitboni ab 10 Coins · maximal 3 Minuten Rennzeit · Hindernis −50 und ein Leben · 3 Münzen nacheinander = Bonusmultiplikator</small></p></section><section class="panel hidden" id="finish"><h2>🏁 Runde beendet!</h2><p id="result"></p><div class="row"><label>Name oder Initialen (max. 20 Zeichen) <input id="initials" maxlength="20" placeholder="Name / ABC" autocomplete="off"></label><button id="save" class="primary">Ergebnis speichern</button></div></section><section class="panel hidden" id="versusPanel"><h2>🏆 Duell-Ergebnis</h2><p id="versusResult"></p><button id="again" class="primary">Neues Duell starten</button></section><section class="panel"><h2>🏆 Highscores – Top 1.000</h2><div class="row"><label>Strecke <select id="rankTrack"><option value="classic">Landstraße</option><option value="desert">Wüste</option><option value="night">Nachtstadt</option></select></label><label>Level <select id="ranking"><option value="easy">Leicht</option><option value="normal" selected>Mittel</option><option value="hard">Schwer</option></select></label><button id="clear">Rangliste löschen</button></div><table><thead><tr><th>#</th><th>Name</th><th>Punkte</th><th>Spielzeit</th><th>Datum</th><th>Uhrzeit</th></tr></thead><tbody id="scores"></tbody></table><div class="row" style="margin-top:12px"><button id="prevScores">◀ Zurück</button><span id="scorePage">Seite 1</span><button id="nextScores">Weiter ▶</button></div><div class="row" style="margin-top:12px"><button id="exportScores">⬇ Ranglisten exportieren</button><label class="filebtn" for="importFile">⬆ Ranglisten importieren</label><input type="file" id="importFile" accept=".json,application/json"></div><p><small>Mit Export/Import kannst du Ranglisten zwischen Geräten übertragen. Beim Import werden Ergebnisse zusammengeführt. Die lokalen Listen bleiben unabhängig von der zusätzlichen Online-Rangliste.</small></p><p><small>Bis zu 1.000 Highscores je Strecke und Level werden lokal in diesem Browser gespeichert. Im Duell fahren beide Spieler gleichzeitig: Spieler 1 mit A/D, Spieler 2 mit den Pfeiltasten. Der Duellmodus ist für PC/Laptop gedacht.</small></p></section><section class="panel" id="onlinePanel"><h2>🌐 Online-Highscores – Top 1.000</h2><p style="text-align:left">Gemeinsame Rangliste für alle Geräte. Lokale Highscores bleiben zusätzlich erhalten.</p><div class="row"><label>Strecke <select id="onlineTrack"><option value="classic">Landstraße</option><option value="desert">Wüste</option><option value="night">Nachtstadt</option></select></label><label>Level <select id="onlineDifficulty"><option value="easy">Leicht</option><option value="normal" selected>Mittel</option><option value="hard">Schwer</option></select></label><button id="onlineRefresh">↻ Online aktualisieren</button></div><p id="onlineStatus" role="status" style="font-size:13px">Online-Rangliste wird geladen …</p><div style="overflow-x:auto"><table><thead><tr><th>#</th><th>Name</th><th>Punkte</th><th>Spielzeit</th><th>Datum</th><th>Uhrzeit</th></tr></thead><tbody id="onlineScores"></tbody></table></div><div class="row" style="margin-top:12px"><button id="onlinePrev">◀ Zurück</button><span id="onlinePageLabel">Seite 1</span><button id="onlineNext">Weiter ▶</button></div><p><small>Öffentliche Rangliste: Einträge können ohne Anmeldung eingereicht werden. Online-Ergebnisse werden auf dem Server auf gültige Werte und eine Mindestpause zwischen Einträgen geprüft. Ein vollständiger Schutz gegen gefälschte Spielergebnisse ist ohne serverseitige Spielprüfung nicht möglich. Die Uhrzeit wird in Deutschland angezeigt. Die individuelle Spielzeit wird bei neuen Ergebnissen auch online gespeichert. Alte lokale Einträge werden nicht automatisch hochgeladen. Bei älteren Online-Einträgen ohne Zeitangabe erscheint ein Strich.</small></p></section></main><script>
-(()=>{'use strict';const $=id=>document.getElementById(id),canvas=$('game'),g=canvas.getContext('2d');g.setTransform(1.3,0,0,1,0,0);const MAX_GAME_TIME=180,MAX_POINTS=1000000,MOTOR_DURATION=MAX_GAME_TIME+10,ROAD_H=720;let collected=0,bonusTime=0,bonusFlash=0,bonusFlashValue=0,bonusFlashPlayer=0,scorePage=0,players=[],gameDuration=0,duelSaveIndex=0;const PAGE_SIZE=50,MAX_SCORES=1000;let playing=false,raf=0,last=0,countdownUntil=0,countdownActive=false,elapsed=0,spawn=0,score=0,lives=3,objects=[],invincible=0,roadOffset=0,level='normal',track='classic',mode='solo',round=1,duel=[],awaitingSecond=false,streak=0,sound=true,audio=null,motorOn=false,motorOsc=null,motorGain=null,carColor='#36b9ff';let keys={left:false,right:false,p1left:false,p1right:false,p2left:false,p2right:false},player={x:200,y:ROAD_H-78};const opts={easy:{speed:155,interval:.53,car:205},normal:{speed:240,interval:.38,car:260},hard:{speed:320,interval:.29,car:310}},labels={easy:'Leicht',normal:'Mittel',hard:'Schwer',classic:'Landstraße',desert:'Wüste',night:'Nachtstadt'};// Android Chrome: Spielgeräusche als echte WAV-Audiodaten statt WebAudio-Oszillatoren.
-const audioCache=new Map();let motorAudio=null;
-function wavUrl(freq,duration,kind='tone'){
- const cacheKey=kind+':'+freq+':'+duration;
- if(audioCache.has(cacheKey))return audioCache.get(cacheKey);
- const rate=22050,n=Math.floor(rate*duration),buffer=new ArrayBuffer(44+n*2),view=new DataView(buffer);
- const str=(offset,v)=>{for(let i=0;i<v.length;i++)view.setUint8(offset+i,v.charCodeAt(i))};
- str(0,'RIFF');view.setUint32(4,36+n*2,true);str(8,'WAVE');str(12,'fmt ');
- view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,1,true);
- view.setUint32(24,rate,true);view.setUint32(28,rate*2,true);view.setUint16(32,2,true);view.setUint16(34,16,true);
- str(36,'data');view.setUint32(40,n*2,true);
- for(let i=0;i<n;i++){
-  const t=i/rate,env=kind==='motor'?1:Math.min(1,t/.008)*Math.max(0,1-t/duration);
-  const wave=kind==='motor'?(.25*Math.sin(2*Math.PI*freq*t)+.65*Math.sin(2*Math.PI*freq*2*t)+.45*Math.sin(2*Math.PI*freq*3*t)+.20*Math.sin(2*Math.PI*freq*4*t)):Math.sin(2*Math.PI*freq*t);
-  view.setInt16(44+i*2,Math.round(Math.max(-1,Math.min(1,wave*env*(kind==='motor'?.55:.45)))*32767),true);
- }
- const url=URL.createObjectURL(new Blob([buffer],{type:'audio/wav'}));audioCache.set(cacheKey,url);return url;
+<!DOCTYPE html>
+<html lang="de">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>
+   Coin Racer – Amanda Edition 4.1
+  </title>
+  <style>
+   :root{font-family:system-ui,Arial,sans-serif;color:#f5f7ff;background:#101522}
+   *{box-sizing:border-box}
+   body{margin:0;padding:14px}
+   main{max-width:1280px;margin:auto}
+   h1{text-align:center;color:#ffdb54;letter-spacing:2px;margin:8px}
+   p{text-align:center;color:#bfc9dd}
+   .panel{background:#202b42;border:1px solid #52627f;border-radius:14px;padding:14px;margin:12px 0}
+   .row{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap}
+   label{font-weight:600}
+   select,input,button{font:inherit;background:#34435f;border:1px solid #7888a4;border-radius:8px;color:white;padding:9px}
+   button{cursor:pointer;font-weight:700}
+   button.primary{background:#ffce35;color:#1c2332;border:0}
+   button:disabled{opacity:.45;cursor:default}
+   canvas{display:block;width:min(100%,600px);height:auto;margin:auto;border:4px solid #687895;border-radius:10px;touch-action:none}
+   .hud{display:flex;justify-content:space-around;gap:6px;flex-wrap:wrap;font-weight:bold;margin-bottom:10px}
+   .controls{display:flex;justify-content:center;gap:12px;margin:12px}
+   .controls button{font-size:26px;width:100px;touch-action:none;user-select:none}
+   .hidden{display:none!important}
+   #message{text-align:center;color:#ffda62;font-weight:700;min-height:24px;margin:10px}
+   table{width:100%;border-collapse:collapse}
+   th,td{padding:9px 5px;text-align:left;border-bottom:1px solid #44536d}
+   th{color:#ffdc61}
+/* Heutige Highscore-Einträge gut lesbar hervorheben (lokal und online). */
+tr.score-today td{color:#ff929b;font-weight:750;background:#3a2539}
+
+   input{width:85px;text-align:center;text-transform:uppercase}
+   #initials{width:235px;max-width:100%;text-transform:none;text-align:left}
+   small{color:#b9c7dd}
+   h2{margin:4px 0 12px}
+   #turnNotice{text-align:center;color:#8fe0ff;font-weight:700;margin:6px}
+   .tag{display:inline-block;background:#354865;border-radius:8px;padding:5px 8px}
+   #versusResult{font-weight:700;color:#ffdf73;text-align:center}
+   #splash{position:fixed;inset:0;background:radial-gradient(circle at center,#243c67,#090d19 75%);z-index:20;display:flex;align-items:center;justify-content:center;padding:18px;text-align:center}
+   #splash .inner{border:5px double #ffda54;padding:30px 22px;border-radius:18px;max-width:440px;width:100%;box-shadow:0 0 45px #ffce3544}
+   #splash h2{font-size:clamp(30px,9vw,55px);color:#ffda54;text-shadow:3px 3px #b53c65;margin:12px 0}
+   #splash p{color:#fff}
+   #splash button{font-size:20px;padding:15px 25px}
+   #carPreview{display:inline-block;font-size:32px}
+    .muted{font-size:12px;color:#b9c7dd}
+    .filebtn{display:inline-block;padding:9px;background:#34435f;border:1px solid #7888a4;border-radius:8px;cursor:pointer}
+   #importFile{display:none}
+   .game-layout{display:flex;align-items:flex-start;justify-content:center;gap:16px;max-width:1260px;margin:0 auto}
+   .game-road{flex:1 1 0;min-width:0;max-width:1040px}
+   .game-road canvas{width:100%}
+   .game-sidebar{flex:0 0 174px;display:flex;flex-direction:column;gap:12px;position:sticky;top:18px;padding-top:14px}
+   .game-sidebar #start{width:100%;padding:16px 10px;font-size:17px;line-height:1.3}
+   .game-sidebar small{text-align:center;line-height:1.5}
+   @media(max-width:640px){.game-layout{flex-direction:column;align-items:stretch;gap:10px}.game-road{width:100%;max-width:600px;margin:0 auto}.game-sidebar{order:-1;position:static;padding:0;flex:0 0 auto;align-items:center}.game-sidebar #start{width:min(100%,340px)}.game-sidebar small{display:none}}
+    .audio-controls{gap:24px}
+   .audio-slider{display:flex;align-items:center;gap:9px;font-size:13px;white-space:nowrap}
+   .audio-slider input{width:130px;accent-color:#ffce35}
+   .audio-slider span{min-width:36px;text-align:right}
+   @media(max-width:550px){.audio-controls{flex-direction:column;align-items:center}.audio-slider{width:310px;max-width:100%;justify-content:space-between}}
+    
+.finish-rank-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:14px 0}
+   
+.finish-rank-card{border:2px solid #ffcf4b;border-radius:15px;background:linear-gradient(145deg,#182740,#354b67);padding:16px;text-align:center;box-shadow:0 0 24px #ffd54a33;animation:rankReveal .8s cubic-bezier(.2,1.4,.4,1) both}
+   
+.finish-rank-card .rank-title{color:#cbd9ec;font-weight:700;font-size:14px}
+   
+.finish-rank-card .rank-number{font-size:clamp(27px,5vw,45px);font-weight:900;color:#ffdf67;text-shadow:0 0 15px #ffca4a88;margin:6px 0}
+   
+.finish-rank-card .rank-note{font-size:12px;color:#d4e1f5}
+   
+.finish-rank-card.confirmed{border-color:#79e3b2;animation:rankConfirm .75s ease both}
+   
+.finish-rank-card.confirmed .rank-number{color:#8ff5c1}
+   
+@keyframes rankReveal{0%{opacity:0;transform:scale(.55) translateY(35px)}65%{opacity:1;transform:scale(1.09) translateY(-5px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+   
+@keyframes rankConfirm{0%{transform:scale(.9);filter:brightness(1)}45%{transform:scale(1.08);filter:brightness(1.7)}100%{transform:scale(1);filter:brightness(1)}}
+   
+@media(prefers-reduced-motion:reduce){.finish-rank-card{animation:none!important}}
+   
+.name-settings{display:flex;flex-direction:column;align-items:center;gap:10px}
+   .name-entry{display:grid;grid-template-columns:320px 205px;align-items:center;gap:10px}
+   .name-entry label{display:flex;align-items:center;justify-content:flex-end;gap:8px;white-space:nowrap}
+   .name-entry button{width:205px}
+   @media(max-width:600px){.name-entry{display:flex;flex-wrap:wrap;justify-content:center}.name-entry label{flex-wrap:wrap;justify-content:center}}
+   
+/* Begrenzte Bildschirmhöhe: komplette Strecke bleibt im Seitenlayout handhabbar,
+   ohne die Canvas-Koordinaten oder die Fahrbahnbreite im Spiel zu verändern. */
+.game-road canvas{width:auto;max-width:100%;height:auto;max-height:min(68vh,600px);object-fit:contain}
+   
+.game-road{display:flex;justify-content:center;align-items:flex-start}
+   
+#soloRankCards:empty{display:none}
+   
+/* Zentrierte Rennfläche und Startknopf unterhalb der Fahrbahnen. */
+.game-layout{display:flex;flex-direction:column;align-items:center;gap:10px;max-width:100%;margin:0 auto}
+   
+.game-road{width:100%;max-width:1040px;margin:0 auto;display:flex;justify-content:center}
+   
+.game-road canvas{width:auto;max-width:100%;max-height:min(68vh,600px);height:auto;object-fit:contain}
+   
+.game-sidebar{order:2;position:static;flex:none;width:100%;align-items:center;padding:0;gap:4px}
+   
+.game-sidebar #start{width:min(100%,290px);padding:13px 10px}
+   
+.game-sidebar small{display:none}
+   
+#duelClocks{display:none;justify-content:space-around;gap:10px;flex-wrap:wrap;margin:6px auto 10px;max-width:850px}
+   
+#duelClocks.active{display:flex}
+   
+.duel-clock{background:#304363;border:1px solid #8296b8;border-radius:9px;padding:8px 14px;font-weight:800;text-align:center;min-width:185px}
+   
+.duel-clock strong{color:#ffdc58;font-size:22px;font-variant-numeric:tabular-nums}
+   
+.duel-clock.done{opacity:.65}
+   
+
+/* Einzelspielermodus: Button wie gewünscht rechts neben der Fahrbahn. */
+.game-layout:not(.duel-layout){flex-direction:row;align-items:flex-start;max-width:820px}
+   
+.game-layout:not(.duel-layout) .game-road{flex:1 1 0;min-width:0}
+   
+.game-layout:not(.duel-layout) .game-sidebar{order:2;position:static;flex:0 0 174px;width:174px;padding-top:14px}
+   
+.game-layout:not(.duel-layout) .game-sidebar #start{width:100%}
+   
+@media(max-width:640px){
+.game-layout:not(.duel-layout){flex-direction:column;align-items:center}
+.game-layout:not(.duel-layout) .game-sidebar{flex:none;width:100%;padding:0}
 }
-function unlockAudio(){return true}
-function beep(freq=600,len=.08){if(!sound)return;try{const a=new Audio(wavUrl(freq,len));a.volume=.8;a.play().catch(()=>{$('message').textContent='Ton blockiert: Bitte Spiel starten und erneut testen.'});}catch(e){$('message').textContent='Audiofehler: '+e.message}}
-function vehicle(x,y,color,enemy=false){g.save();g.translate(x,y);if(enemy)g.scale(.76,.86);g.fillStyle='#121820';for(const dx of [-21,14])for(const dy of [-23,14])g.fillRect(dx,dy,7,19);g.fillStyle=color;g.fillRect(-17,-31,34,62);g.fillStyle='#b3e5fa';g.fillRect(-12,enemy?8:-19,24,15);g.fillStyle='#24334e';g.fillRect(-12,enemy?-19:9,24,10);g.fillStyle=enemy?'#ff5555':'#ffeeb2';g.fillRect(-14,enemy?26:-30,8,5);g.fillRect(6,enemy?26:-30,8,5);g.restore()}function draw(){const pal=track==='desert'?['#caa45c','#645447','#ffe4aa']:track==='night'?['#172e45','#29313f','#64c9ee']:['#377044','#454950','#f0e7bd'];g.fillStyle=pal[0];g.fillRect(0,0,400,ROAD_H);if(track==='night'){for(let x of [4,351])for(let y=0;y<ROAD_H;y+=90){g.fillStyle='#203b59';g.fillRect(x,y,44,66);g.fillStyle='#ffdb65';for(let j=0;j<3;j++)g.fillRect(x+8+j*11,y+14,5,8)}}if(track==='desert'){g.fillStyle='#e9c77a';for(let y=30;y<ROAD_H;y+=110){g.fillRect(18,y,12,4);g.fillRect(362,y+30,18,4)}}g.fillStyle=pal[1];g.fillRect(55,0,290,ROAD_H);g.fillStyle=track==='night'?'#76d9f8':'#f5f3e5';g.fillRect(59,0,5,ROAD_H);g.fillRect(336,0,5,ROAD_H);g.fillStyle=pal[2];for(let y=-65+roadOffset%85;y<ROAD_H;y+=85){if(mode==='versus'){for(const x of [102,150,250,298])g.fillRect(x,y,3,42)}else{g.fillRect(151,y,5,42);g.fillRect(245,y,5,42)}}if(mode==='versus'){
-  // Undurchfahrbare Mittelplanke zwischen zwei getrennten dreispurigen Fahrbahnen.
-  g.fillStyle='#141c2c';g.fillRect(191,0,18,ROAD_H);
-  g.fillStyle='#aeb8c7';g.fillRect(193,0,14,ROAD_H);
-  g.fillStyle='#5e6876';g.fillRect(196,0,8,ROAD_H);
-  g.fillStyle='#f6df76';for(let y=-22+roadOffset%44;y<ROAD_H;y+=44)g.fillRect(197,y,6,21);
-  g.fillStyle='#f5f3e5';g.fillRect(55,0,5,ROAD_H);g.fillRect(340,0,5,ROAD_H);
+   
+/* Zweispielermodus: Startknopf im unteren Mittelbereich zwischen den Fahrbahnen. */
+.game-layout.duel-layout .game-road{position:relative}
+   
+.game-layout.duel-layout .game-sidebar{
+ position:absolute;z-index:5;left:50%;bottom:12px;transform:translateX(-50%);
+ width:100px;padding:0;margin:0;display:flex;align-items:center;
+ background:transparent;pointer-events:none;
+}
+   
+.game-layout.duel-layout .game-sidebar #start{
+ pointer-events:auto;width:100px;max-width:100px;padding:9px 2px;
+ font-size:11px;line-height:1.15;overflow-wrap:anywhere;box-shadow:0 2px 12px #0009;
+}
+   
+.game-layout.duel-layout .game-sidebar small{display:none}
+   
+
+/* Duell-Anzeigen: zwei exakt gleich breite Spalten, eine je Spieler. */
+#duelHud{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+ gap:12px;max-width:860px;margin:8px auto!important;text-align:center}
+   
+#duelHud.hidden{display:none!important}
+   
+#duelHud>span{min-width:0;white-space:nowrap}
+   
+#duelClocks{display:none;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+ gap:12px;max-width:860px;width:100%;margin:6px auto 10px}
+   
+#duelClocks.active{display:grid}
+   
+#duelClocks .duel-clock{min-width:0;justify-self:center;width:max-content;max-width:100%;white-space:nowrap}
+   
+.game-panel-duel>.hud{display:none}
+   
+@media(max-width:600px){
+ #duelHud{gap:4px;font-size:12px}
+ #duelClocks{gap:4px}
+ #duelClocks .duel-clock{padding:6px 5px;font-size:11px}
+ #duelClocks .duel-clock strong{font-size:16px}
+}
+   
+
+/* Einzelspieler: Fahrbahn unabhängig vom Startbutton exakt zentrieren. */
+.game-layout:not(.duel-layout){
+ position:relative;display:block;width:100%;max-width:100%;min-height:0;
+}
+   
+.game-layout:not(.duel-layout) .game-road{
+ width:min(100%,600px);max-width:600px;margin:0 auto;flex:none;
+}
+   
+.game-layout:not(.duel-layout) .game-sidebar{
+ position:absolute;right:0;top:14px;order:unset;
+ width:174px;flex:none;padding:0;margin:0;
+}
+   
+.game-layout:not(.duel-layout) .game-sidebar #start{width:100%}
+   
+@media(max-width:920px){
+ .game-layout:not(.duel-layout){display:flex;flex-direction:column;align-items:center;gap:12px}
+ .game-layout:not(.duel-layout) .game-road{width:min(100%,600px)}
+ .game-layout:not(.duel-layout) .game-sidebar{
+  position:static;width:min(100%,340px);align-items:center;order:2;
  }
- for(const o of objects){if(o.type==='coin'||o.type==='star'){g.beginPath();g.arc(o.x,o.y,o.type==='star'?18:15,0,Math.PI*2);g.fillStyle=o.type==='star'?'#f8f2a3':o.value>=100?'#a6dce8':o.value>=25?'#c48813':'#a66e43';g.fill();g.beginPath();g.arc(o.x,o.y,o.type==='star'?14:12,0,Math.PI*2);g.fillStyle=o.type==='star'?'#e74cff':o.value>=100?'#9bf1ff':o.value>=25?'#ffdf4a':'#eeb47c';g.fill();g.fillStyle='#583500';g.font='bold 15px Arial';g.textAlign='center';g.fillText(o.type==='star'?'★':String(o.value||100),o.x,o.y+5)}else if(o.type==='cone'){g.fillStyle='#fff';g.fillRect(o.x-15,o.y+16,30,7);g.fillStyle='#ff9c2c';g.beginPath();g.moveTo(o.x,o.y-20);g.lineTo(o.x+14,o.y+17);g.lineTo(o.x-14,o.y+17);g.closePath();g.fill();g.fillStyle='#fff';g.fillRect(o.x-8,o.y+3,16,5)}else vehicle(o.x,o.y,o.color||'#e44857',true)}if(mode==='versus'){players.forEach((p,i)=>{if(p.lives>0){if(!p.invincible||Math.floor(p.invincible*9)%2===0)vehicle(p.x,p.y,i===0?'#36b9ff':'#ff596b');g.save();g.font='bold 19px system-ui';g.textAlign='center';g.textBaseline='middle';g.lineWidth=4;g.strokeStyle='#101522';g.strokeText(String(i+1),p.x,p.y-49);g.fillStyle='#ffffff';g.fillText(String(i+1),p.x,p.y-49);g.restore()}})}else if(invincible<=0||Math.floor(invincible*9)%2===0)vehicle(player.x,player.y,carColor);if(bonusFlash>0){g.save();g.textAlign='center';g.font='bold 28px Arial';g.fillStyle='#fff6a5';g.shadowColor='#ffb900';g.shadowBlur=12;g.fillText('+'+bonusFlashValue+' SEKUNDEN!'+(mode==='versus'?' (SPIELER '+bonusFlashPlayer+')':''),200,130);g.restore()}if(!playing&&elapsed===0){g.fillStyle='#000a';g.fillRect(55,279,290,134);g.textAlign='center';g.fillStyle='#ffde62';g.font='bold 27px monospace';g.fillText('COIN RACER',200,331);g.font='17px monospace';g.fillText('DRÜCKE START!',200,368)}}function multiplier(){return Math.min(4,1+Math.floor(streak/3))}function bonusForCoins(n){if(n===10)return 5;if(n===15)return 10;if(n===20)return 15;if(n>=25&&n%5===0)return 30+10*((n-25)/5);return 0}function timeText(n){return String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0')}function activePlayers(){return mode==='versus'?players:[{x:player.x,y:player.y,lives,score,collected,streak,invincible}]}function update(dt){
- const cfg=opts[level];elapsed+=dt;bonusFlash=Math.max(0,bonusFlash-dt);roadOffset+=cfg.speed*dt;
- const racers=mode==='versus'?players:[player];
- for(let i=0;i<racers.length;i++){
-  const p=racers[i];if(mode==='solo'){p.lives=lives;p.score=score;p.collected=collected;p.streak=streak;p.invincible=invincible}
-  p.invincible=Math.max(0,(p.invincible||0)-dt);
-  const goLeft=mode==='versus'?(i===0?keys.p1left:keys.p2left):keys.left;
-  const goRight=mode==='versus'?(i===0?keys.p1right:keys.p2right):keys.right;
-  if(p.lives>0){if(goLeft)p.x-=cfg.car*dt;if(goRight)p.x+=cfg.car*dt}
-  p.x=mode==='versus'?(i===0?Math.max(79,Math.min(173,p.x)):Math.max(227,Math.min(321,p.x))):Math.max(83,Math.min(317,p.x));
- }
- spawn+=dt;while(spawn>=cfg.interval){spawn-=cfg.interval;
-  // Gleiche Gegenstandsart und gleicher Münzwert für beide Spieler,
-  // aber unabhängige zufällige Fahrspuren je Spielbereich.
-  const lanePositions=mode==='versus'?[[79,126,173],[227,274,321]]:[[104,200,296]];
-  const r=Math.random(),type=r<.67?'coin':r<.77?'star':r<.89?'enemy':'cone';
-  const values=[1,5,10,25,50,100,250],weights=[9,12,18,24,20,13,4];let value=100;
-  if(type==='coin'){let z=Math.random()*100;for(let i=0;i<values.length;i++){z-=weights[i];if(z<0){value=values[i];break}}}
-  for(const sideLanes of lanePositions){
-   // Eine freie Spur unabhängig vom anderen Spieler wählen.
-   const available=sideLanes.filter(lane=>!objects.some(o=>o.y<100&&Math.abs(o.x-lane)<37));
-   if(!available.length)continue;
-   const lane=available[Math.floor(Math.random()*available.length)];
-   objects.push({x:lane,y:-40,type,value,color:['#e44857','#54bbef','#e7c34d','#b47be8','#65cc83','#f28b4b'][Math.floor(Math.random()*6)]});
+}
+   
+
+/* Aufklappbare Spielanleitung: rein informativ, ohne Einfluss auf die Spiellogik. */
+.game-guide{max-width:980px;margin:12px auto}
+   
+.game-guide summary{cursor:pointer;font-size:1.1rem;font-weight:800;color:#ffdb54;padding:5px}
+   
+.game-guide .guide-content{line-height:1.6;color:#e8efff}
+   
+.game-guide h3{margin:13px 0 4px;color:#ffdb54;font-size:1rem}
+   
+.game-guide p,.game-guide ul{margin:4px 0 9px;text-align:left;color:#e8efff}
+   
+.game-guide li{margin:3px 0}/* Duell: getrennte, gut lesbare Bonusanzeigen für beide Spieler. */
+#p1Combo,#p2Combo{color:#ffdb54;font-weight:900;font-variant-numeric:tabular-nums}
+</style>
+ </head>
+ <body>
+  <div id="splash">
+   <div class="inner">
+    <div style="font-size:52px">
+     🏎️ 🪙 🏁
+    </div>
+    <h2>
+     COIN RACER
+    </h2>
+    <p style="font-weight:bold;color:#ffdb54">
+     ...by Amanda Köhn
+    </p>
+    <p>
+     AMANDA EDITION · 4.1 · Version 15 – Duell-Anzeigen ausgerichtet
+    </p>
+    <p>
+     3 Strecken · 3 Level · 2 Spieler · 1.000 Highscores
+    </p>
+    <button class="primary" id="enterArcade">
+     ▶ WEITER ZU DEN EINSTELLUNGEN
+    </button>
+    <p class="muted">
+     Retro Racing · 60 Sekunden · Sammle Coins!
+    </p>
+   </div>
+  </div>
+  <main>
+   <h1>
+    🏎️ COIN RACER 4.1
+   </h1>
+   <p style="margin:0 0 12px;color:#ffdb54;font-weight:700;letter-spacing:1px">
+    ...by Amanda Köhn
+   </p>
+   <p>
+    Retro-Rennspiel · Münzen · Bonussterne · Hindernisse · Highscores
+   </p>
+   <section class="panel">
+    <div class="row">
+     <label>
+      Strecke
+      <select id="track">
+       <option value="classic">
+        🛣️ Landstraße
+       </option>
+       <option value="desert">
+        🏜️ Wüste
+       </option>
+       <option value="night">
+        🌃 Nachtstadt
+       </option>
+      </select>
+     </label>
+     <label>
+      Schwierigkeit
+      <select id="difficulty">
+       <option value="easy">
+        Leicht
+       </option>
+       <option selected="" value="normal">
+        Mittel
+       </option>
+       <option value="hard">
+        Schwer
+       </option>
+      </select>
+     </label>
+     <label>
+      Rennwagen
+      <select id="car">
+       <option value="blue">
+        🔵 Blitzblau
+       </option>
+       <option value="red">
+        🔴 Feuerrot
+       </option>
+       <option value="green">
+        🟢 Turbo-Grün
+       </option>
+       <option value="gold">
+        🟡 Goldflitzer
+       </option>
+      </select>
+     </label>
+     <label>
+      Modus
+      <select id="mode">
+       <option value="solo">
+        1 Spieler
+       </option>
+       <option value="versus">
+        2 Spieler (2 × 3 Spuren · PC/Laptop)
+       </option>
+      </select>
+     </label>
+    </div>
+    <div class="row" style="margin-top:12px">
+     <label>
+      Start-Countdown
+      <select id="countdownSeconds">
+       <option value="3">
+        3 Sekunden
+       </option>
+       <option selected="" value="5">
+        5 Sekunden
+       </option>
+      </select>
+     </label>
+     <button id="sound">
+      🔊 Ton an
+     </button>
+     <button id="motor">
+      🏎️ Motor an
+     </button>
+     <button id="testSound">
+      🔔 Ton testen
+     </button>
+    </div>
+    <div class="row audio-controls" style="margin-top:12px">
+     <label class="audio-slider">
+      Motorgeräusche
+      <input id="motorLevel" max="100" min="0" type="range" value="10"/>
+      <span id="motorPercent">
+       10%
+      </span>
+     </label>
+     <label class="audio-slider">
+      Spielgeräusche
+      <input id="effectsLevel" max="100" min="0" type="range" value="10"/>
+      <span id="effectsPercent">
+       10%
+      </span>
+     </label>
+    </div>
+    <div class="name-settings" style="margin-top:14px">
+     <div class="name-entry">
+      <label>
+       Spieler 1 (optional)
+       <input id="preName1" maxlength="20" placeholder="Name / Initialen" style="width:185px;text-transform:none;text-align:left"/>
+      </label>
+      <button id="resetName1" type="button">
+       ↺ Name 1 zurücksetzen
+      </button>
+     </div>
+     <div class="name-entry hidden" id="secondNameBox">
+      <label>
+       Spieler 2 (optional)
+       <input id="preName2" maxlength="20" placeholder="Name / Initialen" style="width:185px;text-transform:none;text-align:left"/>
+      </label>
+      <button id="resetName2" type="button">
+       ↺ Name 2 zurücksetzen
+      </button>
+     </div>
+    </div>
+    <small style="display:block;text-align:center;margin-top:6px">
+     Namen bleiben auf diesem Gerät gespeichert. Zurücksetzen löscht keine Highscores.
+    </small>
+   </section>
+   <details class="panel game-guide" id="gameGuide">
+    <summary>
+     📖 Spielanleitung öffnen
+    </summary>
+    <div class="guide-content">
+     <h3>
+      Spielziel
+     </h3>
+     <p>
+      Fahre mit deinem Rennwagen über die Straße, sammle Münzen und Sterne und weiche Hindernissen aus. Versuche, möglichst viele Punkte zu erreichen, bevor die Zeit oder deine Leben aufgebraucht sind.
+     </p>
+     <h3>
+      Vor dem Start
+     </h3>
+     <p>
+      Wähle eine der drei Strecken (Landstraße, Wüste oder Nachtstadt), den Schwierigkeitsgrad (Leicht, Mittel oder Schwer), deinen Wagen und den Spielmodus. Du kannst außerdem den Countdown und die Lautstärke von Motor- und Spielgeräuschen einstellen. Ein Name kann bereits vor dem Start eingetragen werden.
+     </p>
+     <h3>
+      Steuerung
+     </h3>
+     <ul>
+      <li>
+       <strong>
+        Einzelspieler:
+       </strong>
+       Mit den Pfeiltasten links/rechts oder A/D lenken. Auf Mobilgeräten die eingeblendeten Pfeiltasten verwenden.
+      </li>
+      <li>
+       <strong>
+        Zweispielermodus am PC/Laptop:
+       </strong>
+       Spieler 1 lenkt mit A/D, Spieler 2 mit den Pfeiltasten links/rechts. Beide fahren gleichzeitig auf getrennten Straßen.
+      </li>
+     </ul>
+     <h3>
+      Punkte und Leben
+     </h3>
+     <ul>
+      <li>
+       Münzen bringen je nach Art 1, 5, 10, 25, 50, 100 oder 250 Punkte.
+      </li>
+      <li>
+       Ein Stern bringt 300 Punkte.
+      </li>
+      <li>
+       Der Bonusmultiplikator erhöht die Punkte für Münzen und Sterne: Bei 0–2 eingesammelten Gegenständen gilt ×1, bei 3–5 gilt ×2, bei 6–8 gilt ×3 und ab 9 gilt ×4. Die Anzeige ⭐ ×1 bis ⭐ ×4 zeigt den aktuellen Faktor. Der jeweils dritte Gegenstand einer Serie zählt noch mit dem bisherigen Faktor; ab dem vierten gilt ×2. Bei einer Kollision beginnt die Serie wieder bei ×1. Im Zweispielermodus hat jeder Spieler seinen eigenen Multiplikator.
+      </li>
+      <li>
+       Ein Hindernis kostet ein Leben und zieht 50 Punkte ab.
+      </li>
+      <li>
+       Ab bestimmten gesammelten Münzmengen gibt es zusätzliche Rennzeit. Die gesamte Rennzeit ist auf höchstens drei Minuten begrenzt.
+      </li>
+     </ul>
+     <h3>
+      Spielende und Highscores
+     </h3>
+     <p>
+      Nach dem Rennen siehst du dein Ergebnis und deine Platzierung. Du kannst deinen Namen eingeben beziehungsweise übernehmen und das Ergebnis speichern. Die Highscore-Ansicht enthält lokale und Online-Ergebnisse. Einträge vom heutigen Datum werden zur besseren Übersicht mit hellroter Schrift auf dunklem, rötlichem Hintergrund hervorgehoben. Im Duell erhalten beide Spieler eigene Ergebnisse und Zeiten.
+     </p>
+    </div>
+   </details>
+   <section class="panel">
+    <div id="turnNotice">
+     Bereit zum Start
+    </div>
+    <div class="hidden" id="duelHud" style="display:flex;justify-content:space-around;gap:12px;font-weight:700;margin:8px 0">
+     <span>
+      🔵 Spieler 1 (A/D):
+      <span id="p1Score">
+       0
+      </span>
+      · ❤️
+      <span id="p1Lives">
+       3
+      </span>
+      · ⭐ <span id="p1Combo" aria-label="Multiplikator Spieler 1">×1</span>
+     </span>
+     <span>
+      🔴 Spieler 2 (←/→):
+      <span id="p2Score">
+       0
+      </span>
+      · ❤️
+      <span id="p2Lives">
+       3
+      </span>
+      · ⭐ <span id="p2Combo" aria-label="Multiplikator Spieler 2">×1</span>
+     </span>
+    </div>
+    <div class="hud">
+     <span>
+      🪙
+      <span id="score">
+       0
+      </span>
+     </span>
+     <span>
+      ⏱
+      <span id="time">
+       60
+      </span>
+      s
+     </span>
+     <span>
+      ❤️
+      <span id="lives">
+       3
+      </span>
+     </span>
+     <span>
+      🪙 Coins:
+      <span id="collected">
+       0
+      </span>
+      /10
+     </span>
+     <span>
+      ⭐
+      <span id="combo">
+       x1
+      </span>
+     </span>
+    </div>
+    <div aria-live="off" id="duelClocks">
+     <div class="duel-clock" id="clockBox1">
+      🔵 Spieler 1 · ⏱
+      <strong id="clock1">
+       01:00
+      </strong>
+     </div>
+     <div class="duel-clock" id="clockBox2">
+      🔴 Spieler 2 · ⏱
+      <strong id="clock2">
+       01:00
+      </strong>
+     </div>
+    </div>
+    <div class="game-layout">
+     <div class="game-road">
+      <canvas aria-label="Arcade-Rennspiel" height="720" id="game" width="520">
+      </canvas>
+     </div>
+     <aside class="game-sidebar">
+      <button class="primary" id="start">
+       ▶ Spiel starten
+      </button>
+      <small>
+       Spiel starten oder neu starten, ohne nach oben zu scrollen.
+      </small>
+     </aside>
+    </div>
+    <div id="message">
+     Wähle Strecke, Level und Spielmodus.
+    </div>
+    <div class="controls">
+     <button aria-label="Nach links fahren" id="left">
+      ◀
+     </button>
+     <div aria-live="off" id="countdownBelow" style="min-width:125px;text-align:center;font-size:27px;font-weight:900;color:#ffdb54;align-self:center;white-space:nowrap;background:#202b42;border:1px solid #52627f;border-radius:10px;padding:9px 4px">
+     </div>
+     <button aria-label="Nach rechts fahren" id="right">
+      ▶
+     </button>
+    </div>
+    <p>
+     <small>
+      Pfeiltasten oder A/D · Mobil: Tasten gedrückt halten · Coins +1, +5, +10, +25, +50, +100 oder +250 · Stern +300 · Gestaffelte Zeitboni ab 10 Coins · maximal 3 Minuten Rennzeit · Hindernis −50 und ein Leben · 3 Münzen nacheinander = Bonusmultiplikator
+     </small>
+    </p>
+   </section>
+   <section class="panel hidden" id="finish">
+    <h2>
+     🏁 Runde beendet!
+    </h2>
+    <p id="result">
+    </p>
+    <div aria-live="polite" class="finish-rank-grid" id="finishRankCards" role="status">
+    </div>
+    <p id="rankResult" role="status" style="font-weight:bold;color:#ffdb54">
+    </p>
+    <div class="row">
+     <label>
+      Name oder Initialen (max. 20 Zeichen)
+      <input autocomplete="off" id="initials" maxlength="20" placeholder="Name / ABC"/>
+     </label>
+     <button class="primary" id="save">
+      Ergebnis speichern
+     </button>
+    </div>
+   </section>
+   <section class="panel hidden" id="versusPanel">
+    <h2>
+     🏆 Duell-Ergebnis
+    </h2>
+    <p id="versusResult">
+    </p>
+    <div aria-live="polite" class="finish-rank-grid" id="duelRankCards" role="status">
+    </div>
+    <p id="duelRanks" role="status" style="color:#ffdb54;font-weight:bold">
+    </p>
+    <button class="primary" id="again">
+     Neues Duell starten
+    </button>
+   </section>
+   <section class="panel" id="rankSummaryPanel">
+    <h2>
+     🏁 Online-Platzierung nach dem Rennen
+    </h2>
+    <div aria-live="polite" class="finish-rank-grid" id="soloRankCards" role="status">
+    </div>
+    <p id="rankSummary" role="status">
+     Nach dem Speichern eines Ergebnisses wird hier die Online-Platzierung angezeigt.
+    </p>
+   </section>
+   <section class="panel">
+    <h2>
+     🏆 Highscores – Top 1.000
+    </h2>
+    <div class="row">
+     <label>
+      Strecke
+      <select id="rankTrack">
+       <option value="classic">
+        Landstraße
+       </option>
+       <option value="desert">
+        Wüste
+       </option>
+       <option value="night">
+        Nachtstadt
+       </option>
+      </select>
+     </label>
+     <label>
+      Level
+      <select id="ranking">
+       <option value="easy">
+        Leicht
+       </option>
+       <option selected="" value="normal">
+        Mittel
+       </option>
+       <option value="hard">
+        Schwer
+       </option>
+      </select>
+     </label>
+     <button id="clear">
+      Rangliste löschen
+     </button>
+    </div>
+    <table>
+     <thead>
+      <tr>
+       <th>
+        #
+       </th>
+       <th>
+        Name
+       </th>
+       <th>
+        Punkte
+       </th>
+       <th>
+        Spielzeit
+       </th>
+       <th>
+        Datum
+       </th>
+       <th>
+        Uhrzeit
+       </th>
+      </tr>
+     </thead>
+     <tbody id="scores">
+     </tbody>
+    </table>
+    <div class="row" style="margin-top:12px">
+     <button id="prevScores">
+      ◀ Zurück
+     </button>
+     <span id="scorePage">
+      Seite 1
+     </span>
+     <button id="nextScores">
+      Weiter ▶
+     </button>
+    </div>
+    <div class="row" style="margin-top:12px">
+     <button id="exportScores">
+      ⬇ Ranglisten exportieren
+     </button>
+     <label class="filebtn" for="importFile">
+      ⬆ Ranglisten importieren
+     </label>
+     <input accept=".json,application/json" id="importFile" type="file"/>
+    </div>
+    <p>
+     <small>
+      Mit Export/Import kannst du Ranglisten zwischen Geräten übertragen. Beim Import werden Ergebnisse zusammengeführt. Die lokalen Listen bleiben unabhängig von der zusätzlichen Online-Rangliste.
+     </small>
+    </p>
+    <p>
+     <small>
+      Bis zu 1.000 Highscores je Strecke und Level werden lokal in diesem Browser gespeichert. Im Duell fahren beide Spieler gleichzeitig: Spieler 1 mit A/D, Spieler 2 mit den Pfeiltasten. Der Duellmodus ist für PC/Laptop gedacht.
+     </small>
+    </p>
+   </section>
+   <section class="panel" id="onlinePanel">
+    <h2>
+     🌐 Online-Highscores – Top 1.000
+    </h2>
+    <p style="text-align:left">
+     Gemeinsame Rangliste für alle Geräte. Lokale Highscores bleiben zusätzlich erhalten.
+    </p>
+    <div class="row">
+     <label>
+      Strecke
+      <select id="onlineTrack">
+       <option value="classic">
+        Landstraße
+       </option>
+       <option value="desert">
+        Wüste
+       </option>
+       <option value="night">
+        Nachtstadt
+       </option>
+      </select>
+     </label>
+     <label>
+      Level
+      <select id="onlineDifficulty">
+       <option value="easy">
+        Leicht
+       </option>
+       <option selected="" value="normal">
+        Mittel
+       </option>
+       <option value="hard">
+        Schwer
+       </option>
+      </select>
+     </label>
+     <button id="onlineRefresh">
+      ↻ Online aktualisieren
+     </button>
+    </div>
+    <p id="onlineStatus" role="status" style="font-size:13px">
+     Online-Rangliste wird geladen …
+    </p>
+    <div style="overflow-x:auto">
+     <table>
+      <thead>
+       <tr>
+        <th>
+         #
+        </th>
+        <th>
+         Name
+        </th>
+        <th>
+         Punkte
+        </th>
+        <th>
+         Spielzeit
+        </th>
+        <th>
+         Datum
+        </th>
+        <th>
+         Uhrzeit
+        </th>
+       </tr>
+      </thead>
+      <tbody id="onlineScores">
+      </tbody>
+     </table>
+    </div>
+    <div class="row" style="margin-top:12px">
+     <button id="onlinePrev">
+      ◀ Zurück
+     </button>
+     <span id="onlinePageLabel">
+      Seite 1
+     </span>
+     <button id="onlineNext">
+      Weiter ▶
+     </button>
+    </div>
+    <p>
+     <small>
+      Öffentliche Rangliste: Einträge können ohne Anmeldung eingereicht werden. Online-Ergebnisse werden auf dem Server auf gültige Werte und eine Mindestpause zwischen Einträgen geprüft. Ein vollständiger Schutz gegen gefälschte Spielergebnisse ist ohne serverseitige Spielprüfung nicht möglich. Die Uhrzeit wird in Deutschland angezeigt. Die individuelle Spielzeit wird bei neuen Ergebnissen auch online gespeichert. Alte lokale Einträge werden nicht automatisch hochgeladen. Bei älteren Online-Einträgen ohne Zeitangabe erscheint ein Strich.
+     </small>
+    </p>
+   </section>
+  </main>
+  <script>
+(() => {
+  'use strict';
+  /*
+   * COIN RACER 4.1 – kommentierte Lernversion (Version 15)
+   * Aufbau: Spielzustand, Zeichenfunktionen, Spielschleife, Eingaben,
+   * lokale Rangliste und Online-Anbindung.
+   * Das Spiel nutzt JavaScript-Objekte für Spieler und Hindernisse;
+   * eigene JavaScript-Klassen sind hier nicht erforderlich.
+   * Diese Kommentare verändern keine Berechnung oder Spielregel.
+   */
+  const $ = id => document.getElementById(id), canvas = $('game'), g = canvas.getContext('2d'); g.setTransform(1.3, 0, 0, 1, 0, 0);/* Konstanten begrenzen die Rennzeit, Punktzahl und die gespeicherten Ranglisten. */
+  const MAX_GAME_TIME = 180, MAX_POINTS = 1000000, MOTOR_DURATION = MAX_GAME_TIME + 10, ROAD_H = 720;/* Spielzustand: collected zählt Münzen, bonusTime speichert zusätzlich gewonnene Sekunden. */
+  let collected = 0, bonusTime = 0, bonusFlash = 0, bonusFlashValue = 0, bonusFlashPlayer = 0, scorePage = 0, players = [], gameDuration = 0, duelSaveIndex = 0; const PAGE_SIZE = 50, MAX_SCORES = 1000; let playing = false, raf = 0, last = 0, countdownUntil = 0, countdownActive = false, elapsed = 0, spawn = 0, score = 0, lives = 3, objects = [], invincible = 0, roadOffset = 0, level = 'normal', track = 'classic', mode = 'solo', round = 1, duel = [], awaitingSecond = false, streak = 0, sound = true, audio = null, motorOn = false, motorOsc = null, motorGain = null, carColor = '#36b9ff';/* Partikel erzeugen Rauch und Funken; ihre Position und Lebensdauer werden pro Bild aktualisiert. */
+  let particles = [], steerSmokeClock = 0, onlineRankMessages = []; let keys = { left: false, right: false, p1left: false, p1right: false, p2left: false, p2right: false }, player = { x: 200, y: ROAD_H - 78 }; const opts = { easy: { speed: 155, interval: .53, car: 205 }, normal: { speed: 240, interval: .38, car: 260 }, hard: { speed: 320, interval: .29, car: 310 } }, labels = { easy: 'Leicht', normal: 'Mittel', hard: 'Schwer', classic: 'Landstraße', desert: 'Wüste', night: 'Nachtstadt' };// Android Chrome: Spielgeräusche als echte WAV-Audiodaten statt WebAudio-Oszillatoren.
+  const audioCache = new Map(); let motorAudio = null;
+
+  function wavUrl(freq, duration, kind = 'tone') {
+    const cacheKey = kind + ':' + freq + ':' + duration;
+    if (audioCache.has(cacheKey)) return audioCache.get(cacheKey);
+    const rate = 22050, n = Math.floor(rate * duration), buffer = new ArrayBuffer(44 + n * 2), view = new DataView(buffer);
+    const str = (offset, v) => { for (let i = 0; i < v.length; i++)view.setUint8(offset + i, v.charCodeAt(i)) };
+    str(0, 'RIFF'); view.setUint32(4, 36 + n * 2, true); str(8, 'WAVE'); str(12, 'fmt ');
+    view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+    view.setUint32(24, rate, true); view.setUint32(28, rate * 2, true); view.setUint16(32, 2, true); view.setUint16(34, 16, true);
+    str(36, 'data'); view.setUint32(40, n * 2, true);
+    for (let i = 0; i < n; i++) {
+      const t = i / rate, env = kind === 'motor' ? 1 : Math.min(1, t / .008) * Math.max(0, 1 - t / duration);
+      // Periodischer, nahtlos loopbarer Motor: tiefe Zündimpulse, Oberwellen und leichtes Rasseln.
+      // Der Motor wird fuer die gesamte maximale Renndauer erzeugt; kein Loop-Neustart und keine Unterbrechung.
+      const phase = 2 * Math.PI * freq * t;
+      const firing = Math.pow(Math.max(0, Math.sin(phase)), 3);
+      const rumble = .42 * Math.sin(phase * .5) + .24 * Math.sin(phase) + .18 * Math.sin(phase * 2);
+      const rasp = .14 * Math.sin(phase * 3) + .10 * Math.sin(phase * 5) + .055 * Math.sin(phase * 9);
+      const flutter = .88 + .12 * Math.sin(2 * Math.PI * 7 * t);
+      const wave = kind === 'motor' ? Math.tanh((rumble + rasp + .38 * firing - .10) * 1.65) * flutter : Math.sin(phase);
+      view.setInt16(44 + i * 2, Math.round(Math.max(-1, Math.min(1, wave * env * (kind === 'motor' ? .90 : .45))) * 32767), true);
+    }
+    const url = URL.createObjectURL(new Blob([buffer], { type: 'audio/wav' })); audioCache.set(cacheKey, url); return url;
   }
- }
- for(const o of objects){o.y+=cfg.speed*dt;
-  for(const p of racers){if(p.lives<=0)continue;
-   const dx=Math.abs(o.x-p.x),dy=Math.abs(o.y-p.y);
-   if(dx<(o.type==='coin'||o.type==='star'?28:23)&&dy<(o.type==='coin'||o.type==='star'?43:46)){
-    if(o.type==='coin'||o.type==='star'){
-     p.score=Math.min(MAX_POINTS,p.score+(o.type==='star'?300:o.value)*Math.min(4,1+Math.floor(p.streak/3)));p.streak++;
-     if(o.type==='coin'){p.collected++;const award=bonusForCoins(p.collected);
-      if(award){const granted=Math.min(award,Math.max(0,MAX_GAME_TIME-60-bonusTime));if(granted>0){bonusTime+=granted;bonusFlash=2;bonusFlashValue=granted;bonusFlashPlayer=mode==='versus'?players.indexOf(p)+1:1;$('message').textContent='⏱ +'+granted+' Sekunden für '+p.collected+' Coins!';beep(1120,.20)}else{beep(620+Math.min(600,o.value*2),.07)}}else beep(620+Math.min(600,o.value*2),.07)
-     }else beep(1000,.09);o.y=999;break;
-    }else if(p.invincible<=0){p.lives--;if(p.lives===0)p.finishedAt=Math.min(MAX_GAME_TIME,elapsed);p.score=Math.max(0,p.score-50);p.streak=0;p.invincible=1.4;beep(150,.22);o.y=999;break}
-   }
-  }
- }
- objects=objects.filter(o=>o.y<ROAD_H+50);
- if(mode==='versus'){
-  $('p1Score').textContent=players[0].score;$('p2Score').textContent=players[1].score;
-  $('p1Lives').textContent=players[0].lives;$('p2Lives').textContent=players[1].lives;
-  score=Math.max(players[0].score,players[1].score);collected=players[0].collected+players[1].collected;
-  lives=players[0].lives+players[1].lives;streak=Math.max(players[0].streak,players[1].streak);
- }else{score=player.score;collected=player.collected;lives=player.lives;streak=player.streak;invincible=player.invincible}
- $('score').textContent=score;$('time').textContent=Math.max(0,Math.ceil(Math.min(60+bonusTime-elapsed,MAX_GAME_TIME-elapsed)));
- $('lives').textContent=lives;$('combo').textContent='x'+multiplier();$('collected').textContent=collected%10;
- if(elapsed>=60+bonusTime||elapsed>=MAX_GAME_TIME||lives<=0)end();
-}function countdownFrame(t){if(!countdownActive)return;const remaining=Math.max(0,Math.ceil((countdownUntil-t)/1000));draw();if(remaining>0){g.save();g.fillStyle='#081324c9';g.fillRect(55,505,290,185);g.textAlign='center';g.fillStyle='#ffdb54';g.font='bold 19px system-ui';g.fillText('BEREIT MACHEN!',200,548);g.font='bold 96px monospace';g.fillText(String(remaining),200,635);g.fillStyle='#fff';g.font='14px system-ui';g.fillText('Gleich geht es los!',200,669);g.restore();$('message').textContent='Start in '+remaining+' Sekunden – Bildschirm ausrichten!';$('countdownBelow').textContent='START '+remaining;raf=requestAnimationFrame(countdownFrame)}else{countdownActive=false;playing=true;last=t;$('countdownBelow').textContent='⏱ 01:00';$('message').textContent='LOS! Münzen und Sterne sammeln – Hindernissen ausweichen!';beep(920,.14);raf=requestAnimationFrame(frame)}}function frame(t){if(!playing)return;const dt=Math.min((t-last)/1000,.045);last=t;update(dt);$('countdownBelow').textContent='⏱ '+timeText(Math.max(0,Math.ceil(Math.min(MAX_GAME_TIME-elapsed,60+bonusTime-elapsed))));draw();if(playing)raf=requestAnimationFrame(frame)}function start(newMatch=true){unlockAudio();stopMotor();motorOn=sound;$('motor').textContent=motorOn?'🏎️ Motor aus':'🏎️ Motor an';if(motorOn)requestAnimationFrame(()=>startMotor().catch(()=>{motorOn=false;$('motor').textContent='🏎️ Motor an'}));cancelAnimationFrame(raf);countdownActive=false;playing=false;$('countdownBelow').textContent='START';if(newMatch){level=$('difficulty').value;track=$('track').value;mode=$('mode').value;carColor=({blue:'#36b9ff',red:'#f94b59',green:'#50ed89',gold:'#ffcf3d'})[$('car').value]||'#36b9ff';round=1;duel=[];awaitingSecond=false}elapsed=spawn=score=roadOffset=invincible=streak=collected=bonusTime=bonusFlash=bonusFlashValue=bonusFlashPlayer=0;lives=3;objects=[];player={x:200,y:ROAD_H-78,lives:3,score:0,collected:0,streak:0,invincible:0};players=mode==='versus'?[{x:126,y:ROAD_H-78,lives:3,score:0,collected:0,streak:0,invincible:0,finishedAt:null},{x:274,y:ROAD_H-78,lives:3,score:0,collected:0,streak:0,invincible:0,finishedAt:null}]:[];Object.keys(keys).forEach(k=>keys[k]=false);$('duelHud').classList.toggle('hidden',mode!=='versus');last=performance.now();$('finish').classList.add('hidden');$('versusPanel').classList.add('hidden');$('start').textContent='↻ Neu starten';$('message').textContent=mode==='versus'?'Beide Spieler bereit? Spieler 1: A/D · Spieler 2: Pfeiltasten ←/→':'Countdown läuft – Bildschirm ausrichten!';$('turnNotice').textContent=mode==='versus'?'🎮 Beide Spieler gleichzeitig · A/D und ←/→':'🎮 Einzelspieler';$('score').textContent=0;$('time').textContent=60;$('lives').textContent=3;$('combo').textContent='x1';$('collected').textContent=0;for(const id of ['difficulty','track','mode','car','countdownSeconds'])$(id).disabled=true;draw();countdownActive=true;countdownUntil=performance.now()+Number($('countdownSeconds').value)*1000;raf=requestAnimationFrame(countdownFrame)}function end(){playing=false;gameDuration=Math.min(MAX_GAME_TIME,Math.round(elapsed));if(mode==='versus')for(const p of players){if(p.finishedAt===null)p.finishedAt=Math.min(MAX_GAME_TIME,elapsed)}$('countdownBelow').textContent='🏁 '+timeText(gameDuration);stopMotor();motorOn=false;$('motor').textContent='🏎️ Motor an';cancelAnimationFrame(raf);
- if(mode==='versus'){$('result').textContent=`Spieler 1: ${players[0].score} Punkte in ${timeText(Math.round(players[0].finishedAt))} · Spieler 2: ${players[1].score} Punkte in ${timeText(Math.round(players[1].finishedAt))}. Bitte zunächst einen Namen für Auto 1 (Spieler 1, blau) eingeben.`;duelSaveIndex=0}
- else $('result').textContent=`${score} Punkte · ${collected} Coins · ${bonusTime} Bonussekunden · Spielzeit ${timeText(gameDuration)} · ${labels[track]} · ${labels[level]} · ${lives<=0?'keine Leben mehr':'Zeit abgelaufen'}.`;
- $('finish').classList.remove('hidden');$('message').textContent='🏁 Bitte Namen oder Initialen eingeben und Ergebnis speichern.';beep(300,.28)
-}function key(){return 'coinRacerPlus_v2_'+$('rankTrack').value+'_'+$('ranking').value}function read(){try{const data=JSON.parse(localStorage.getItem(key())||'[]');return Array.isArray(data)?data.slice(0,MAX_SCORES):[]}catch{return []}}function render(){const tbody=$('scores');tbody.replaceChildren();const data=read();const pages=Math.max(1,Math.ceil(data.length/PAGE_SIZE));scorePage=Math.min(scorePage,pages-1);if(!data.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=6;td.textContent='Noch kein Highscore – werde Erster!';tr.append(td);tbody.append(tr)}for(let i=scorePage*PAGE_SIZE;i<Math.min(data.length,(scorePage+1)*PAGE_SIZE);i++){const tr=document.createElement('tr');const entry=data[i];for(const v of [i+1,entry.initials,entry.score,Number.isFinite(entry.duration)?timeText(entry.duration):'–',entry.date||'–',entry.time||'–']){const td=document.createElement('td');td.textContent=v;tr.append(td)}tbody.append(tr)}$('scorePage').textContent='Seite '+(scorePage+1)+' von '+pages+' · '+data.length+' Einträge';$('prevScores').disabled=scorePage===0;$('nextScores').disabled=scorePage>=pages-1}function save(){const input=$('initials');const initials=input.value.trim().replace(/\s+/g,' ').slice(0,20);
- if(!/^[A-Za-zÄÖÜäöüß0-9][A-Za-zÄÖÜäöüß0-9 ._'-]{0,19}$/.test(initials)){input.setCustomValidity('Bitte 1–20 Zeichen verwenden: Buchstaben, Zahlen, Leerzeichen, Punkt, Bindestrich, Apostroph oder Unterstrich.');input.reportValidity();input.focus();return}input.setCustomValidity('');
- const finalScore=Math.min(MAX_POINTS,mode==='versus'?players[duelSaveIndex].score:score);const finalDuration=mode==='versus'?Math.min(MAX_GAME_TIME,Math.round(players[duelSaveIndex].finishedAt)):gameDuration;
+
+  function unlockAudio() { return true }
+
+  function beep(freq = 600, len = .08) { if (!sound) return; try { const a = new Audio(wavUrl(freq, len)); a.volume = Math.max(0, Math.min(1, Number($('effectsLevel').value) / 100)); a.play().catch(() => { $('message').textContent = 'Ton blockiert: Bitte Spiel starten und erneut testen.' }); } catch (e) { $('message').textContent = 'Audiofehler: ' + e.message } }
+
+  function vehicle(x, y, color, enemy = false) { g.save(); g.translate(x, y); if (enemy) g.scale(.76, .86); g.fillStyle = '#121820'; for (const dx of [-21, 14]) for (const dy of [-23, 14]) g.fillRect(dx, dy, 7, 19); g.fillStyle = color; g.fillRect(-17, -31, 34, 62); g.fillStyle = '#b3e5fa'; g.fillRect(-12, enemy ? 8 : -19, 24, 15); g.fillStyle = '#24334e'; g.fillRect(-12, enemy ? -19 : 9, 24, 10); g.fillStyle = enemy ? '#ff5555' : '#ffeeb2'; g.fillRect(-14, enemy ? 26 : -30, 8, 5); g.fillRect(6, enemy ? 26 : -30, 8, 5); g.restore() }// Eigene Canvas-Animationen: Rauch und Funken mit begrenzter Lebensdauer.
+
+  function emitParticles(x, y, kind) { const count = kind === 'spark' ? 17 : 3; for (let i = 0; i < count; i++) { const a = Math.random() * Math.PI * 2, v = kind === 'spark' ? 65 + Math.random() * 160 : 12 + Math.random() * 32; particles.push({ x, y, vx: Math.cos(a) * v, vy: kind === 'spark' ? Math.sin(a) * v : 18 + Math.random() * 38, life: kind === 'spark' ? .55 : .8, maxLife: kind === 'spark' ? .55 : .8, kind, size: kind === 'spark' ? 2 + Math.random() * 4 : 5 + Math.random() * 7 }) } if (particles.length > 180) particles.splice(0, particles.length - 180) }
+
+  function animateParticles(dt) { for (const p of particles) { p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt; if (p.kind === 'smoke') { p.size += dt * 13; p.vx *= Math.max(0, 1 - dt * 1.5) } } particles = particles.filter(p => p.life > 0) }
+
+  function paintParticles() { g.save(); for (const p of particles) { g.globalAlpha = Math.max(0, p.life / p.maxLife) * (p.kind === 'smoke' ? .42 : 1); g.fillStyle = p.kind === 'spark' ? (p.life / p.maxLife > .5 ? '#ffdf55' : '#ff713c') : '#d8e0e6'; g.beginPath(); g.arc(p.x, p.y, p.size, 0, Math.PI * 2); g.fill() } g.restore() }
+  // Beide Duell-Fahrbahnen besitzen dieselbe Breite und drei Spuren wie die Einzelstrecke.
+
+  function drawRoadSection(offset) {    
+g.save(); g.translate(offset, 0);
+    const pal = track === 'desert' ? ['#caa45c', '#645447', '#ffe4aa'] : track === 'night' ? ['#172e45', '#29313f', '#64c9ee'] : ['#377044', '#454950', '#f0e7bd'];
+    g.fillStyle = pal[0]; g.fillRect(0, 0, 400, ROAD_H);
+    if (track === 'night') { for (let x of [4, 351]) for (let y = 0; y < ROAD_H; y += 90) { g.fillStyle = '#203b59'; g.fillRect(x, y, 44, 66); g.fillStyle = '#ffdb65'; for (let j = 0; j < 3; j++)g.fillRect(x + 8 + j * 11, y + 14, 5, 8) } }
+    if (track === 'desert') { g.fillStyle = '#e9c77a'; for (let y = 30; y < ROAD_H; y += 110) { g.fillRect(18, y, 12, 4); g.fillRect(362, y + 30, 18, 4) } }
+    g.fillStyle = pal[1]; g.fillRect(55, 0, 290, ROAD_H);
+    g.fillStyle = track === 'night' ? '#76d9f8' : '#f5f3e5'; g.fillRect(59, 0, 5, ROAD_H); g.fillRect(336, 0, 5, ROAD_H);
+    g.fillStyle = pal[2]; for (let y = -65 + roadOffset % 85; y < ROAD_H; y += 85) { g.fillRect(151, y, 5, 42); g.fillRect(245, y, 5, 42) } g.restore();  
+}
+
+  function draw() {    
+drawRoadSection(0); if (mode === 'versus') {
+      drawRoadSection(400);
+      // Mittelplanke zwischen den beiden vollständigen Fahrbahnen.
+      g.fillStyle = '#141c2c'; g.fillRect(391, 0, 18, ROAD_H); g.fillStyle = '#aeb8c7'; g.fillRect(394, 0, 12, ROAD_H);
+      g.fillStyle = '#f6df76'; for (let y = -22 + roadOffset % 44; y < ROAD_H; y += 44)g.fillRect(398, y, 4, 21);
+    }
+    for (const o of objects) { if (o.type === 'coin' || o.type === 'star') { g.beginPath(); g.arc(o.x, o.y, o.type === 'star' ? 18 : 15, 0, Math.PI * 2); g.fillStyle = o.type === 'star' ? '#f8f2a3' : o.value >= 100 ? '#a6dce8' : o.value >= 25 ? '#c48813' : '#a66e43'; g.fill(); g.beginPath(); g.arc(o.x, o.y, o.type === 'star' ? 14 : 12, 0, Math.PI * 2); g.fillStyle = o.type === 'star' ? '#e74cff' : o.value >= 100 ? '#9bf1ff' : o.value >= 25 ? '#ffdf4a' : '#eeb47c'; g.fill(); g.fillStyle = '#583500'; g.font = 'bold 15px Arial'; g.textAlign = 'center'; g.fillText(o.type === 'star' ? '★' : String(o.value || 100), o.x, o.y + 5) } else if (o.type === 'cone') { g.fillStyle = '#fff'; g.fillRect(o.x - 15, o.y + 16, 30, 7); g.fillStyle = '#ff9c2c'; g.beginPath(); g.moveTo(o.x, o.y - 20); g.lineTo(o.x + 14, o.y + 17); g.lineTo(o.x - 14, o.y + 17); g.closePath(); g.fill(); g.fillStyle = '#fff'; g.fillRect(o.x - 8, o.y + 3, 16, 5) } else vehicle(o.x, o.y, o.color || '#e44857', true) } if (mode === 'versus') { players.forEach((p, i) => { if (p.lives > 0) { if (!p.invincible || Math.floor(p.invincible * 9) % 2 === 0) vehicle(p.x, p.y, i === 0 ? '#36b9ff' : '#ff596b'); g.save(); g.font = 'bold 19px system-ui'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.lineWidth = 4; g.strokeStyle = '#101522'; g.strokeText(String(i + 1), p.x, p.y - 49); g.fillStyle = '#ffffff'; g.fillText(String(i + 1), p.x, p.y - 49); g.restore() } }) } else if (invincible <= 0 || Math.floor(invincible * 9) % 2 === 0) vehicle(player.x, player.y, carColor); paintParticles(); if (bonusFlash > 0) { g.save(); g.textAlign = 'center'; g.font = 'bold 28px Arial'; g.fillStyle = '#fff6a5'; g.shadowColor = '#ffb900'; g.shadowBlur = 12; g.fillText('+' + bonusFlashValue + ' SEKUNDEN!' + (mode === 'versus' ? ' (SPIELER ' + bonusFlashPlayer + ')' : ''), mode === 'versus' ? 400 : 200, 130); g.restore() } if (!playing && elapsed === 0) { g.fillStyle = '#000a'; g.fillRect(mode === 'versus' ? 255 : 55, 279, 290, 134); g.textAlign = 'center'; g.fillStyle = '#ffde62'; g.font = 'bold 27px monospace'; g.fillText('COIN RACER', mode === 'versus' ? 400 : 200, 331); g.font = '17px monospace'; g.fillText('DRÜCKE START!', mode === 'versus' ? 400 : 200, 368) }  
+} function multiplier() { return Math.min(4, 1 + Math.floor(streak / 3)) } function bonusForCoins(n) { if (n === 10) return 5; if (n === 15) return 10; if (n === 20) return 15; if (n >= 25 && n % 5 === 0) return 30 + 10 * ((n - 25) / 5); return 0 } function timeText(n) { return String(Math.floor(n / 60)).padStart(2, '0') + ':' + String(Math.floor(n % 60)).padStart(2, '0') } function activePlayers() { return mode === 'versus' ? players : [{ x: player.x, y: player.y, lives, score, collected, streak, invincible }] } function update(dt) {
+    const cfg = opts[level]; animateParticles(dt); steerSmokeClock += dt; elapsed += dt; bonusFlash = Math.max(0, bonusFlash - dt); roadOffset += cfg.speed * dt;
+    const racers = mode === 'versus' ? players : [player];
+    // Die Bonuszeit gehört immer nur dem jeweiligen Fahrer.
+    if (mode === 'versus') for (const p of players) {
+      if (p.finishedAt === null && (elapsed >= Math.min(MAX_GAME_TIME, 60 + p.bonusTime) || p.lives <= 0)) {
+        p.finishedAt = Math.min(MAX_GAME_TIME, elapsed);
+      }
+    }
+    for (let i = 0; i < racers.length; i++) {
+      const p = racers[i]; if (mode === 'solo') { p.lives = lives; p.score = score; p.collected = collected; p.streak = streak; p.invincible = invincible }
+      p.invincible = Math.max(0, (p.invincible || 0) - dt);
+      const goLeft = mode === 'versus' ? (i === 0 ? keys.p1left : keys.p2left) : keys.left;
+      const goRight = mode === 'versus' ? (i === 0 ? keys.p1right : keys.p2right) : keys.right;
+      if (p.lives > 0 && (mode !== 'versus' || p.finishedAt === null)) {        
+if (goLeft) p.x -= cfg.car * dt; if (goRight) p.x += cfg.car * dt;
+        if (goLeft !== goRight && steerSmokeClock > .085) { emitParticles(p.x + (goLeft ? 11 : -11), p.y + 30, 'smoke'); if (i === racers.length - 1) steerSmokeClock = 0 }      
+}
+
+      p.x = mode === 'versus' ? (i === 0 ? Math.max(83, Math.min(317, p.x)) : Math.max(483, Math.min(717, p.x))) : Math.max(83, Math.min(317, p.x));
+    }
+    spawn += dt; while (spawn >= cfg.interval) {      
+spawn -= cfg.interval;
+      // Gleiche Gegenstandsart und gleicher Münzwert für beide Spieler,
+      // aber unabhängige zufällige Fahrspuren je Spielbereich.
+      const lanePositions = mode === 'versus' ? [[104, 200, 296], [504, 600, 696]] : [[104, 200, 296]];
+      const r = Math.random(), type = r < .67 ? 'coin' : r < .77 ? 'star' : r < .89 ? 'enemy' : 'cone';
+      const values = [1, 5, 10, 25, 50, 100, 250], weights = [9, 12, 18, 24, 20, 13, 4]; let value = 100;
+      if (type === 'coin') { let z = Math.random() * 100; for (let i = 0; i < values.length; i++) { z -= weights[i]; if (z < 0) { value = values[i]; break } } }
+      for (const sideLanes of lanePositions) {
+        // Eine freie Spur unabhängig vom anderen Spieler wählen.
+        const available = sideLanes.filter(lane => !objects.some(o => o.y < 100 && Math.abs(o.x - lane) < 37));
+        if (!available.length) continue;
+        const lane = available[Math.floor(Math.random() * available.length)];
+        objects.push({ x: lane, y: -40, type, value, color: ['#e44857', '#54bbef', '#e7c34d', '#b47be8', '#65cc83', '#f28b4b'][Math.floor(Math.random() * 6)] });
+      }
+    }
+    for (const o of objects) {      
+o.y += cfg.speed * dt;
+      for (const p of racers) {        
+if (p.lives <= 0 || (mode === 'versus' && p.finishedAt !== null)) continue;
+        const dx = Math.abs(o.x - p.x), dy = Math.abs(o.y - p.y);
+        if (dx < (o.type === 'coin' || o.type === 'star' ? 28 : 23) && dy < (o.type === 'coin' || o.type === 'star' ? 43 : 46)) {
+          if (o.type === 'coin' || o.type === 'star') {
+            p.score = Math.min(MAX_POINTS, p.score + (o.type === 'star' ? 300 : o.value) * Math.min(4, 1 + Math.floor(p.streak / 3))); p.streak++;
+            if (o.type === 'coin') {              
+p.collected++; const award = bonusForCoins(p.collected);
+              if (award) { const granted = Math.min(award, Math.max(0, MAX_GAME_TIME - 60 - (mode === 'versus' ? p.bonusTime : bonusTime))); if (granted > 0) { if (mode === 'versus') p.bonusTime += granted; else bonusTime += granted; bonusFlash = 2; bonusFlashValue = granted; bonusFlashPlayer = mode === 'versus' ? players.indexOf(p) + 1 : 1; $('message').textContent = '⏱ +' + granted + ' Sekunden für ' + p.collected + ' Coins!'; beep(1120, .20) } else { beep(620 + Math.min(600, o.value * 2), .07) } } else beep(620 + Math.min(600, o.value * 2), .07)
+            } else beep(1000, .09); o.y = 999; break;
+          } else if (p.invincible <= 0) { p.lives--; if (p.lives === 0) p.finishedAt = Math.min(MAX_GAME_TIME, elapsed); p.score = Math.max(0, p.score - 50); p.streak = 0; p.invincible = 1.4; emitParticles(p.x, p.y, 'spark'); beep(150, .22); o.y = 999; break }
+        }
+      }
+    }
+    objects = objects.filter(o => o.y < ROAD_H + 50);
+    if (mode === 'versus') {
+      $('p1Score').textContent = players[0].score; $('p2Score').textContent = players[1].score;
+      $('p1Lives').textContent = players[0].lives; $('p2Lives').textContent = players[1].lives;
+      score = Math.max(players[0].score, players[1].score); collected = players[0].collected + players[1].collected;
+      lives = players[0].lives + players[1].lives; streak = Math.max(players[0].streak, players[1].streak);
+    } else { score = player.score; collected = player.collected; lives = player.lives; streak = player.streak; invincible = player.invincible }
+    $('score').textContent = score; $('time').textContent = mode === 'versus' ? '–' : Math.max(0, Math.ceil(Math.min(60 + bonusTime - elapsed, MAX_GAME_TIME - elapsed)));
+    if (mode === 'versus') {
+      players.forEach((p, i) => {
+        const remaining = p.finishedAt === null ? Math.max(0, Math.ceil(Math.min(MAX_GAME_TIME - elapsed, 60 + p.bonusTime - elapsed))) : 0;
+        $('clock' + (i + 1)).textContent = p.finishedAt === null ? timeText(remaining) : '🏁 ' + timeText(Math.round(p.finishedAt));
+        $('clockBox' + (i + 1)).classList.toggle('done', p.finishedAt !== null);
+      });
+    }
+    $('lives').textContent = lives; $('combo').textContent = '×' + multiplier(); $('collected').textContent = collected % 10;
+    // Jede Duell-Anzeige liest ausschließlich die Münzserie ihres eigenen Spielers.
+    if (mode === 'versus') {
+      players.forEach((p, i) => {
+        $('p' + (i + 1) + 'Combo').textContent = '×' + Math.min(4, 1 + Math.floor(p.streak / 3));
+      });
+    }
+    if (mode === 'versus' ? (players.every(p => p.finishedAt !== null) || elapsed >= MAX_GAME_TIME) : (elapsed >= 60 + bonusTime || elapsed >= MAX_GAME_TIME || lives <= 0)) end();
+  } function countdownFrame(t) { if (!countdownActive) return; const remaining = Math.max(0, Math.ceil((countdownUntil - t) / 1000)); draw(); if (remaining > 0) { g.save(); g.fillStyle = '#081324c9'; g.fillRect(mode === 'versus' ? 255 : 55, 505, 290, 185); g.textAlign = 'center'; g.fillStyle = '#ffdb54'; g.font = 'bold 19px system-ui'; g.fillText('BEREIT MACHEN!', mode === 'versus' ? 400 : 200, 548); g.font = 'bold 96px monospace'; g.fillText(String(remaining), mode === 'versus' ? 400 : 200, 635); g.fillStyle = '#fff'; g.font = '14px system-ui'; g.fillText('Gleich geht es los!', mode === 'versus' ? 400 : 200, 669); g.restore(); $('message').textContent = 'Start in ' + remaining + ' Sekunden – Bildschirm ausrichten!'; $('countdownBelow').textContent = 'START ' + remaining; raf = requestAnimationFrame(countdownFrame) } else { countdownActive = false; playing = true; last = t; $('countdownBelow').textContent = '⏱ 01:00'; $('message').textContent = 'LOS! Münzen und Sterne sammeln – Hindernissen ausweichen!'; beep(920, .14); raf = requestAnimationFrame(frame) } } function frame(t) { if (!playing) return; const dt = Math.min((t - last) / 1000, .045); last = t; update(dt); $('countdownBelow').textContent = mode === 'versus' ? '⏱ 2 Rennuhren' : ('⏱ ' + timeText(Math.max(0, Math.ceil(Math.min(MAX_GAME_TIME - elapsed, 60 + bonusTime - elapsed))))); draw(); if (playing) raf = requestAnimationFrame(frame) }/* Startalgorithmus: Einstellungen lesen, Spielerzustand zurücksetzen und Countdown starten. */
+
+  function start(newMatch = true) { unlockAudio(); stopMotor(); motorOn = sound; $('motor').textContent = motorOn ? '🏎️ Motor aus' : '🏎️ Motor an'; if (motorOn) requestAnimationFrame(() => startMotor().catch(() => { motorOn = false; $('motor').textContent = '🏎️ Motor an' })); cancelAnimationFrame(raf); countdownActive = false; playing = false; $('countdownBelow').textContent = 'START'; if (newMatch) { level = $('difficulty').value; track = $('track').value; mode = $('mode').value; canvas.width = mode === 'versus' ? 1040 : 520; g.setTransform(1.3, 0, 0, 1, 0, 0); carColor = ({ blue: '#36b9ff', red: '#f94b59', green: '#50ed89', gold: '#ffcf3d' })[$('car').value] || '#36b9ff'; round = 1; duel = []; awaitingSecond = false } elapsed = spawn = score = roadOffset = invincible = streak = collected = bonusTime = bonusFlash = bonusFlashValue = bonusFlashPlayer = 0; particles = []; steerSmokeClock = 0; onlineRankMessages = []; rankEpoch++; previousUpload = null; savedRankSlots.clear(); rankStates.length = 0; $('finishRankCards').replaceChildren(); $('duelRankCards').replaceChildren(); $('soloRankCards').replaceChildren(); $('rankSummary').textContent = 'Nach dem Speichern eines Ergebnisses wird hier die Online-Platzierung angezeigt.'; $('rankResult').textContent = ''; $('duelRanks').textContent = ''; lives = 3; objects = []; player = { x: 200, y: ROAD_H - 78, lives: 3, score: 0, collected: 0, streak: 0, invincible: 0 }; players = mode === 'versus' ? [{ x: 200, y: ROAD_H - 78, lives: 3, score: 0, collected: 0, streak: 0, invincible: 0, finishedAt: null, bonusTime: 0 }, { x: 600, y: ROAD_H - 78, lives: 3, score: 0, collected: 0, streak: 0, invincible: 0, finishedAt: null, bonusTime: 0 }] : []; Object.keys(keys).forEach(k => keys[k] = false); $('duelHud').classList.toggle('hidden', mode !== 'versus'); $('duelClocks').classList.toggle('active', mode === 'versus'); for (let i = 1; i <= 2; i++) { $('clock' + i).textContent = '01:00'; $('clockBox' + i).classList.remove('done') } last = performance.now(); $('finish').classList.add('hidden'); $('versusPanel').classList.add('hidden'); $('start').textContent = '↻ Neu starten'; $('message').textContent = mode === 'versus' ? 'Beide Spieler bereit? Spieler 1: A/D · Spieler 2: Pfeiltasten ←/→' : 'Countdown läuft – Bildschirm ausrichten!'; $('turnNotice').textContent = mode === 'versus' ? '🎮 Beide Spieler gleichzeitig · A/D und ←/→' : '🎮 Einzelspieler'; $('score').textContent = 0; $('time').textContent = 60; $('lives').textContent = 3; $('combo').textContent = '×1'; $('p1Combo').textContent = '×1'; $('p2Combo').textContent = '×1'; $('collected').textContent = 0; for (const id of ['difficulty', 'track', 'mode', 'car', 'countdownSeconds']) $(id).disabled = true; draw(); countdownActive = true; countdownUntil = performance.now() + Number($('countdownSeconds').value) * 1000; raf = requestAnimationFrame(countdownFrame) }/* Rennende: Zeit und Ergebnisse festhalten, Animation stoppen und Ergebnisbereich öffnen. */
+
+  function end() {    
+playing = false; gameDuration = Math.min(MAX_GAME_TIME, Math.round(elapsed)); if (mode === 'versus') for (const p of players) { if (p.finishedAt === null) p.finishedAt = Math.min(MAX_GAME_TIME, elapsed) } $('countdownBelow').textContent = mode === 'versus' ? '🏁 Duell beendet' : ('🏁 ' + timeText(gameDuration)); stopMotor(); motorOn = false; $('motor').textContent = '🏎️ Motor an'; cancelAnimationFrame(raf);
+    if (mode === 'versus') { $('result').textContent =`Spieler 1: ${players[0].score} Punkte in ${timeText(Math.round(players[0].finishedAt))} · Spieler 2: ${players[1].score} Punkte in ${timeText(Math.round(players[1].finishedAt))}. Bitte zunächst einen Namen für Auto 1 (Spieler 1, blau) eingeben.`;duelSaveIndex=0}
+ else $('result').textContent=`${score} Punkte · ${collected} Coins · ${bonusTime} Bonussekunden · Spielzeit ${timeText(gameDuration)} · ${labels[track]} · ${labels[level]} · ${lives <= 0 ? 'keine Leben mehr' : 'Zeit abgelaufen'}.`;
+ $('initials').value=$('preName'+(mode==='versus'?1:1)).value; $('finish').classList.remove('hidden');$('message').textContent='🏁 Vorläufige Online-Platzierung wird ermittelt …';void showProvisionalRanks();beep(300,.28)
+}/* Lokale Ranglisten: eigener Browser-Speicherschlüssel für jede Strecke und Schwierigkeit. */
+
+function key(){return 'coinRacerPlus_v2_'+$('rankTrack').value+'_'+$('ranking').value}function read(){try{const data=JSON.parse(localStorage.getItem(key())||'[]');return Array.isArray(data)?data.slice(0,MAX_SCORES):[]}catch{return []}}function render(){const tbody=$('scores');tbody.replaceChildren();const data=read();const pages=Math.max(1,Math.ceil(data.length/PAGE_SIZE));scorePage=Math.min(scorePage,pages-1);if(!data.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=6;td.textContent='Noch kein Highscore – werde Erster!';tr.append(td);tbody.append(tr)}for(let i=scorePage*PAGE_SIZE;i<Math.min(data.length,(scorePage+1)*PAGE_SIZE);i++){const tr=document.createElement('tr');const entry=data[i];if(entry.date===new Date().toLocaleDateString('de-DE'))tr.classList.add('score-today');for(const v of [i+1,entry.initials,entry.score,Number.isFinite(entry.duration)?timeText(entry.duration):'–',entry.date||'–',entry.time||'–']){const td=document.createElement('td');td.textContent=v;tr.append(td)}tbody.append(tr)}$('scorePage').textContent='Seite '+(scorePage+1)+' von '+pages+' · '+data.length+' Einträge';$('prevScores').disabled=scorePage===0;$('nextScores').disabled=scorePage>=pages-1}/* Speicheralgorithmus: Namen prüfen, Punkte und Spielzeit übernehmen, Rangliste aktualisieren. */
+
+function save(){const input=$('initials');const initials=input.value.trim().replace(/\s+/g,' ').slice(0,20);
+ if(!/^[A-Za-zÄÖÜäöüß0-9][A-Za-zÄÖÜäöüß0-9 .-]{0,19}$/.test(initials)){input.setCustomValidity('Bitte 1–20 Zeichen verwenden: Buchstaben, Zahlen, Leerzeichen, Punkt oder Bindestrich.');input.reportValidity();input.focus();return}input.setCustomValidity('');
+ const nameSlot=mode==='versus'?duelSaveIndex+1:1;$('preName'+nameSlot).value=initials;storePreName(nameSlot,initials);const finalScore=Math.min(MAX_POINTS,mode==='versus'?players[duelSaveIndex].score:score);const finalDuration=mode==='versus'?Math.min(MAX_GAME_TIME,Math.round(players[duelSaveIndex].finishedAt)):gameDuration;
  $('rankTrack').value=track;$('ranking').value=level;const data=read(),now=new Date();
  data.push({initials,score:finalScore,duration:finalDuration,date:now.toLocaleDateString('de-DE'),time:now.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit',second:'2-digit'})});
  data.sort((a,b)=>b.score-a.score);try{localStorage.setItem(key(),JSON.stringify(data.slice(0,MAX_SCORES)))}catch{alert('Speichern ist in diesem Browser nicht verfügbar.')}
- render();void uploadOnlineScore(initials,finalScore,track,level,finalDuration);duel.push({initials,score:finalScore,duration:finalDuration});input.value='';
- if(mode==='versus'&&duelSaveIndex===0){duelSaveIndex=1;$('result').textContent=`Spieler 1 gespeichert. Jetzt Namen für Auto 2 (Spieler 2, rot; ${players[1].score} Punkte, ${timeText(Math.round(players[1].finishedAt))} Spielzeit) eingeben.`;$('message').textContent='Bitte Spieler 2 speichern.';return}
+ render();$('rankResult').textContent='';void uploadOnlineScore(initials,finalScore,track,level,finalDuration,nameSlot);duel.push({initials,score:finalScore,duration:finalDuration});input.value='';
+ if(mode==='versus'&&duelSaveIndex===0){duelSaveIndex=1;$('result').textContent=`Spieler 1 gespeichert. Jetzt Namen für Auto 2 (Spieler 2, rot; ${players[1].score} Punkte, ${timeText(Math.round(players[1].finishedAt))} Spielzeit) eingeben.`;$('message').textContent='Bitte Spieler 2 speichern.';input.value=$('preName2').value;return}
  $('finish').classList.add('hidden');if(mode==='versus'){const [a,b]=duel;const winner=a.score===b.score?'Unentschieden!':(a.score>b.score?a.initials:b.initials)+' gewinnt!';$('versusResult').textContent=`${a.initials}: ${a.score} Punkte (${timeText(a.duration)}) · ${b.initials}: ${b.score} Punkte (${timeText(b.duration)}) — ${winner}`;$('versusPanel').classList.remove('hidden')}
  else $('message').textContent='🏆 Ergebnis gespeichert!';for(const id of ['difficulty','track','mode','car','countdownSeconds'])$(id).disabled=false;awaitingSecond=false;$('start').textContent='▶ Neues Spiel'
-}$('start').addEventListener('click',()=>{if(awaitingSecond){awaitingSecond=false;start(false)}else start(true)});$('again').addEventListener('click',()=>start(true));$('save').addEventListener('click',save);$('initials').addEventListener('input',()=>$('initials').setCustomValidity(''));$('initials').addEventListener('keydown',e=>{if(e.key==='Enter')save()});$('ranking').addEventListener('change',()=>{scorePage=0;render()});$('rankTrack').addEventListener('change',()=>{scorePage=0;render()});$('prevScores').addEventListener('click',()=>{scorePage=Math.max(0,scorePage-1);render()});$('nextScores').addEventListener('click',()=>{scorePage++;render()});$('clear').addEventListener('click',()=>{if(confirm('Diese Highscore-Liste wirklich löschen?')){localStorage.removeItem(key());render()}});$('sound').addEventListener('click',()=>{unlockAudio();sound=!sound;$('sound').textContent=sound?'🔊 Ton an':'🔇 Ton aus';if(!sound){stopMotor();motorOn=false;$('motor').textContent='🏎️ Motor an'}else if((playing||countdownActive)&&!motorOn){motorOn=true;$('motor').textContent='🏎️ Motor aus';startMotor().catch(()=>{motorOn=false;$('motor').textContent='🏎️ Motor an'})}});// Seamless motor: a single looping Web Audio buffer, without restarting an HTML audio element.
+}const NAME_RULE=/^[A-Za-zÄÖÜäöüß0-9][A-Za-zÄÖÜäöüß0-9 .-]{0,19}$/;
+/* Namen bleiben auf dem Gerät gespeichert, bis der zugehörige Reset-Button gedrückt wird. */
+
+function storePreName(n,value){try{localStorage.setItem('coinRacer_preName'+n,value)}catch(e){}}
+for(const n of [1,2]){const field=$('preName'+n);try{field.value=localStorage.getItem('coinRacer_preName'+n)||''}catch(e){}field.addEventListener('input',()=>storePreName(n,field.value));$('resetName'+n).addEventListener('click',()=>{field.value='';storePreName(n,'')})}
+
+function syncNameMode(){$('secondNameBox').classList.toggle('hidden',$('mode').value!=='versus')}
+$('mode').addEventListener('change',syncNameMode);syncNameMode();
+// Den Button je nach Spielmodus an den passenden Ort verschieben.
+// Im Duell liegt er unten über der Mitteltrennung, im Einzelspiel rechts.
+const racingLayout=document.querySelector('.game-layout');
+const racingRoad=document.querySelector('.game-road');
+const racingSidebar=document.querySelector('.game-sidebar');
+/* Darstellung: Startbutton im Duell zwischen die Fahrbahnen verschieben, solo rechts daneben. */
+
+function syncStartButtonPosition(){
+ const duel=$('mode').value==='versus';
+ racingLayout.classList.toggle('duel-layout',duel);
+ racingLayout.closest('section.panel').classList.toggle('game-panel-duel',duel);
+ if(duel){if(racingSidebar.parentElement!==racingRoad)racingRoad.appendChild(racingSidebar)}
+ else if(racingSidebar.parentElement!==racingLayout)racingLayout.appendChild(racingSidebar);
+}
+$('mode').addEventListener('change',syncStartButtonPosition);
+syncStartButtonPosition();
+
+$('start').addEventListener('click',()=>{if(awaitingSecond){awaitingSecond=false;start(false)}else start(true)});$('again').addEventListener('click',()=>start(true));$('save').addEventListener('click',save);$('initials').addEventListener('input',()=>$('initials').setCustomValidity(''));$('initials').addEventListener('keydown',e=>{if(e.key==='Enter')save()});$('ranking').addEventListener('change',()=>{scorePage=0;render()});$('rankTrack').addEventListener('change',()=>{scorePage=0;render()});$('prevScores').addEventListener('click',()=>{scorePage=Math.max(0,scorePage-1);render()});$('nextScores').addEventListener('click',()=>{scorePage++;render()});$('clear').addEventListener('click',()=>{if(confirm('Diese Highscore-Liste wirklich löschen?')){localStorage.removeItem(key());render()}});$('sound').addEventListener('click',()=>{unlockAudio();sound=!sound;$('sound').textContent=sound?'🔊 Ton an':'🔇 Ton aus';if(!sound){stopMotor();motorOn=false;$('motor').textContent='🏎️ Motor an'}else if((playing||countdownActive)&&!motorOn){motorOn=true;$('motor').textContent='🏎️ Motor aus';startMotor().catch(()=>{motorOn=false;$('motor').textContent='🏎️ Motor an'})}});// Seamless motor: a single looping Web Audio buffer, without restarting an HTML audio element.
 let motorContext=null,motorSource=null,motorVolume=null;
+/* Audio: Motorsound anhalten und Ressourcen freigeben. */
+
 function stopMotor(){
  if(motorAudio){motorAudio.pause();motorAudio.currentTime=0;motorAudio=null}
  if(motorSource){try{motorSource.stop()}catch(e){}motorSource=null}
  if(motorVolume){try{motorVolume.disconnect()}catch(e){}motorVolume=null}
 }
+/* Audio: künstlich erzeugten Motorsound mit einstellbarer Lautstärke abspielen. */
+
 async function startMotor(){
  stopMotor();
  // Dieselbe HTML-Audio/WAV-Technik wie bei den hörbaren Münztönen.
- // Motorloop: maximale Spielzeit + 10 Sekunden Reserve.
+ // Kurzer, nahtloser Motorloop mit höherer Grundlautstärke.
  const a=new Audio(wavUrl(82,MOTOR_DURATION,'motor'));
- a.loop=true;a.volume=Math.min(1,Number($('motorLevel').value)/100*1.55);a.preload='auto';motorAudio=a;
+ a.loop=false;a.volume=Math.min(1,Number($('motorLevel').value)/100);a.preload='auto';motorAudio=a;
  await a.play();
  if(!motorOn){stopMotor();return}
  // Keine Statusmeldung: der Countdown-Hinweis bleibt sichtbar.
 }
-$('motorLevel').addEventListener('input',()=>{const v=Number($('motorLevel').value)/100;$('motorPercent').textContent=Math.round(v*100)+'%';if(motorAudio)motorAudio.volume=Math.min(1,v*1.55)});$('motor').addEventListener('click',()=>{
+$('effectsLevel').addEventListener('input',()=>{$('effectsPercent').textContent=$('effectsLevel').value+'%'});$('motorLevel').addEventListener('input',()=>{const v=Number($('motorLevel').value)/100;$('motorPercent').textContent=Math.round(v*100)+'%';if(motorAudio)motorAudio.volume=Math.min(1,v)});$('motor').addEventListener('click',()=>{
  motorOn=!motorOn;
  $('motor').textContent=motorOn?'🏎️ Motor aus':'🏎️ Motor an';
  if(!motorOn){stopMotor();$('message').textContent='Motor ausgeschaltet.';return}
@@ -118,19 +998,55 @@ $('motorLevel').addEventListener('input',()=>{const v=Number($('motorLevel').val
    $('message').textContent='Motor konnte nicht gestartet werden: '+e.message;
  });
 });
-$('testSound').addEventListener('click',()=>{unlockAudio();const old=sound;sound=true;beep(880,.22);sound=old;$('message').textContent='🔔 Signalton angefordert (WAV-Methode) – hörst du ihn?'});$('enterArcade').addEventListener('click',()=>{unlockAudio();$('splash').classList.add('hidden');$('message').textContent='Bitte zuerst alle Spieleinstellungen auswählen und dann auf Spiel starten tippen.';document.querySelector('main').scrollIntoView({behavior:'smooth',block:'start'})});function allScores(){const result={format:'coin-racer-amanda-3',exported:new Date().toISOString(),scores:{}};for(const t of ['classic','desert','night'])for(const d of ['easy','normal','hard']){const k='coinRacerPlus_v2_'+t+'_'+d;try{const rows=JSON.parse(localStorage.getItem(k)||'[]');result.scores[k]=Array.isArray(rows)?rows:[]}catch{result.scores[k]=[]}}return result}$('exportScores').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(allScores(),null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='coin-racer-amanda-highscores.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)});$('importFile').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>1000000)throw Error('Datei zu groß');const parsed=JSON.parse(await file.text());if(parsed.format!=='coin-racer-amanda-3'||!parsed.scores||typeof parsed.scores!=='object')throw Error('Falsches Ranglistenformat');if(!confirm('Ranglisten aus dieser Datei mit den vorhandenen Ergebnissen zusammenführen?'))return;let count=0;for(const t of ['classic','desert','night'])for(const d of ['easy','normal','hard']){const k='coinRacerPlus_v2_'+t+'_'+d;const incoming=parsed.scores[k];if(!Array.isArray(incoming))continue;const valid=incoming.filter(x=>x&&typeof x.initials==='string'&&/^[A-Za-zÄÖÜäöüß0-9][A-Za-zÄÖÜäöüß0-9 ._'-]{0,19}$/.test(x.initials)&&Number.isFinite(x.score)&&x.score>=0&&x.score<=1000000&&(x.duration===undefined||(Number.isFinite(x.duration)&&x.duration>=0&&x.duration<=180))&&typeof x.date==='string'&&x.date.length<=20&&(x.time===undefined||(typeof x.time==='string'&&x.time.length<=20))).slice(0,MAX_SCORES);let old=[];try{old=JSON.parse(localStorage.getItem(k)||'[]')}catch{}const merged=[...(Array.isArray(old)?old:[]),...valid];const seen=new Set();const unique=merged.filter(x=>{const sig=[x.initials,x.score,x.date,x.time||''].join('|');if(seen.has(sig))return false;seen.add(sig);return true});unique.sort((a,b)=>b.score-a.score);localStorage.setItem(k,JSON.stringify(unique.slice(0,MAX_SCORES)));count+=valid.length}render();alert('Import abgeschlossen: '+count+' gültige Einträge eingelesen.')}catch(err){alert('Import fehlgeschlagen: '+err.message)}finally{e.target.value=''}});document.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','a','d','A','D'].includes(e.key)&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='SELECT'){
+$('testSound').addEventListener('click',()=>{unlockAudio();const old=sound;sound=true;beep(880,.22);sound=old;$('message').textContent='🔔 Signalton angefordert (WAV-Methode) – hörst du ihn?'});$('enterArcade').addEventListener('click',()=>{unlockAudio();$('splash').classList.add('hidden');$('message').textContent='Bitte zuerst alle Spieleinstellungen auswählen und dann auf Spiel starten tippen.';document.querySelector('main').scrollIntoView({behavior:'smooth',block:'start'})});function allScores(){const result={format:'coin-racer-amanda-3',exported:new Date().toISOString(),scores:{}};for(const t of ['classic','desert','night'])for(const d of ['easy','normal','hard']){const k='coinRacerPlus_v2_'+t+'_'+d;try{const rows=JSON.parse(localStorage.getItem(k)||'[]');result.scores[k]=Array.isArray(rows)?rows:[]}catch{result.scores[k]=[]}}return result}$('exportScores').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(allScores(),null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='coin-racer-amanda-highscores.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)});$('importFile').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>1000000)throw Error('Datei zu groß');const parsed=JSON.parse(await file.text());if(parsed.format!=='coin-racer-amanda-3'||!parsed.scores||typeof parsed.scores!=='object')throw Error('Falsches Ranglistenformat');if(!confirm('Ranglisten aus dieser Datei mit den vorhandenen Ergebnissen zusammenführen?'))return;let count=0;for(const t of ['classic','desert','night'])for(const d of ['easy','normal','hard']){const k='coinRacerPlus_v2_'+t+'_'+d;const incoming=parsed.scores[k];if(!Array.isArray(incoming))continue;const valid=incoming.filter(x=>x&&typeof x.initials==='string'&&/^[A-Za-zÄÖÜäöüß0-9][A-Za-zÄÖÜäöüß0-9 .-]{0,19}$/.test(x.initials)&&Number.isFinite(x.score)&&x.score>=0&&x.score<=1000000&&(x.duration===undefined||(Number.isFinite(x.duration)&&x.duration>=0&&x.duration<=180))&&typeof x.date==='string'&&x.date.length<=20&&(x.time===undefined||(typeof x.time==='string'&&x.time.length<=20))).slice(0,MAX_SCORES);let old=[];try{old=JSON.parse(localStorage.getItem(k)||'[]')}catch{}const merged=[...(Array.isArray(old)?old:[]),...valid];const seen=new Set();const unique=merged.filter(x=>{const sig=[x.initials,x.score,x.date,x.time||''].join('|');if(seen.has(sig))return false;seen.add(sig);return true});unique.sort((a,b)=>b.score-a.score);localStorage.setItem(k,JSON.stringify(unique.slice(0,MAX_SCORES)));count+=valid.length}render();alert('Import abgeschlossen: '+count+' gültige Einträge eingelesen.')}catch(err){alert('Import fehlgeschlagen: '+err.message)}finally{e.target.value=''}});document.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','a','d','A','D'].includes(e.key)&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='SELECT'){
  e.preventDefault();if(mode==='versus'){if(e.key==='ArrowLeft')keys.p2left=true;else if(e.key==='ArrowRight')keys.p2right=true;else if(e.key.toLowerCase()==='a')keys.p1left=true;else keys.p1right=true}
  else if(e.key==='ArrowLeft'||e.key.toLowerCase()==='a')keys.left=true;else keys.right=true}});
  document.addEventListener('keyup',e=>{if(e.key==='ArrowLeft'){keys.left=false;keys.p2left=false}if(e.key==='ArrowRight'){keys.right=false;keys.p2right=false}if(e.key.toLowerCase()==='a'){keys.left=false;keys.p1left=false}if(e.key.toLowerCase()==='d'){keys.right=false;keys.p1right=false}});
  for(const [id,dir] of [['left','left'],['right','right']]){const b=$(id);b.addEventListener('pointerdown',e=>{e.preventDefault();if(mode==='versus')return;keys[dir]=true;b.setPointerCapture(e.pointerId)});for(const ev of ['pointerup','pointercancel','lostpointercapture'])b.addEventListener(ev,()=>keys[dir]=false)}window.addEventListener('blur',()=>{Object.keys(keys).forEach(k=>keys[k]=false)});render();draw();
+
+// Vorschau: Änderungen der Spieleinstellungen sofort anzeigen, ohne ein Rennen zu starten.
+// Die Werte werden beim tatsächlichen Spielstart wie bisher erneut übernommen.
+function refreshGamePreview() {
+  if (playing || countdownActive) return;
+  mode = $('mode').value;
+  track = $('track').value;
+  level = $('difficulty').value;
+  carColor = ({ blue: '#36b9ff', red: '#f94b59', green: '#50ed89', gold: '#ffcf3d' })[$('car').value] || '#36b9ff';
+  canvas.width = mode === 'versus' ? 1040 : 520;
+  g.setTransform(1.3, 0, 0, 1, 0, 0);
+  player = { x: 200, y: ROAD_H - 78, lives: 3, score: 0, collected: 0, streak: 0, invincible: 0 };
+  players = mode === 'versus' ? [
+    { x: 200, y: ROAD_H - 78, lives: 3, score: 0, collected: 0, streak: 0, invincible: 0 },
+    { x: 600, y: ROAD_H - 78, lives: 3, score: 0, collected: 0, streak: 0, invincible: 0 }
+  ] : [];
+  objects = [];
+  particles = [];
+  roadOffset = 0;
+  $('p1Combo').textContent = '×1';
+  $('p2Combo').textContent = '×1';
+  $('duelHud').classList.toggle('hidden', mode !== 'versus');
+  $('duelClocks').classList.toggle('active', mode === 'versus');
+  $('turnNotice').textContent = mode === 'versus'
+    ? '🎮 Beide Spieler gleichzeitig · A/D und ←/→'
+    : '🎮 Einzelspieler';
+  draw();
+}
+for (const id of ['mode', 'track', 'difficulty', 'car']) {
+  $(id).addEventListener('change', refreshGamePreview);
+}
+refreshGamePreview();
 // Online highscore integration (Supabase Data API; publishable browser key only).
+/* Online-Rangliste: Supabase ist für serverseitige Speicherung und Prüfung zuständig. */
 const ONLINE_BASE='https://iudgcrwpifufihsjiknr.supabase.co/rest/v1/coin_racer_scores';
  const ONLINE_RPC='https://iudgcrwpifufihsjiknr.supabase.co/rest/v1/rpc/submit_coin_racer_score';
 const ONLINE_KEY='sb_publishable_f3GXAF9XgH7bmdSynSCDLg_SaZ4exfh';
 const ONLINE_PAGE_SIZE=50;
 let onlinePage=0,onlineRequest=0,onlineTotal=0;
+
 function onlineHeaders(){return {'apikey':ONLINE_KEY,'Authorization':'Bearer '+ONLINE_KEY}}
+
 function onlineDate(value){const d=new Date(value);if(Number.isNaN(d.getTime()))return ['–','–'];return [new Intl.DateTimeFormat('de-DE',{timeZone:'Europe/Berlin',day:'2-digit',month:'2-digit',year:'numeric'}).format(d),new Intl.DateTimeFormat('de-DE',{timeZone:'Europe/Berlin',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(d)]}
+
 async function loadOnlineScores(){
  const request=++onlineRequest,t=$('onlineTrack').value,d=$('onlineDifficulty').value;
  const from=onlinePage*ONLINE_PAGE_SIZE,to=Math.min(999,from+ONLINE_PAGE_SIZE-1);
@@ -143,21 +1059,91 @@ async function loadOnlineScores(){
   const range=response.headers.get('content-range')||'';const count=Number(range.split('/')[1]);onlineTotal=Number.isFinite(count)?Math.min(1000,count):Math.min(1000,from+rows.length);
   const body=$('onlineScores');body.replaceChildren();
   if(!rows.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=6;td.textContent='Noch keine Einträge auf dieser Seite.';tr.append(td);body.append(tr)}
-  rows.forEach((r,i)=>{const tr=document.createElement('tr');const [date,time]=onlineDate(r.created_at);for(const val of [from+i+1,r.initials,r.score,Number.isFinite(r.play_time_seconds)?timeText(r.play_time_seconds):'–',date,time]){const td=document.createElement('td');td.textContent=String(val);tr.append(td)}body.append(tr)});
+  rows.forEach((r,i)=>{const tr=document.createElement('tr');const [date,time]=onlineDate(r.created_at);if(date===new Intl.DateTimeFormat('de-DE',{timeZone:'Europe/Berlin',day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date()))tr.classList.add('score-today');for(const val of [from+i+1,r.initials,r.score,Number.isFinite(r.play_time_seconds)?timeText(r.play_time_seconds):'–',date,time]){const td=document.createElement('td');td.textContent=String(val);tr.append(td)}body.append(tr)});
   const pages=Math.max(1,Math.ceil(onlineTotal/ONLINE_PAGE_SIZE));$('onlinePageLabel').textContent='Seite '+(onlinePage+1)+' von '+pages+' · '+onlineTotal+' von maximal 1.000';$('onlinePrev').disabled=onlinePage===0;$('onlineNext').disabled=onlinePage>=pages-1;
   $('onlineStatus').textContent='Online verbunden ✓';
  }catch(err){if(request!==onlineRequest)return;$('onlineStatus').textContent='Online-Rangliste nicht erreichbar: '+err.message+' – lokale Rangliste funktioniert weiterhin.';$('onlineNext').disabled=true}
  finally{if(request===onlineRequest)$('onlineRefresh').disabled=false}
 }
-async function uploadOnlineScore(initials,score,track,difficulty,playTimeSeconds){
- // Online-Namen benötigen zuvor die Supabase-Migration für 20 Zeichen.
- if(!/^[A-Za-zÄÖÜäöüß0-9][A-Za-zÄÖÜäöüß0-9 ._'-]{0,19}$/.test(initials)){$('message').textContent='Lokal gespeichert. Online: 1–20 Zeichen, Buchstaben, Zahlen, Leerzeichen, Punkt, Bindestrich, Apostroph oder Unterstrich erlaubt.';return}
+// Exakte Wettbewerbsplatzierung: 1 + Anzahl der Ergebnisse mit MEHR Punkten.
+// Bei gleicher Punktzahl teilen sich Spieler denselben Platz.
+// Die Abfrage zählt alle passenden Datensätze, nicht nur die Top 1000.
+
+async function fetchOnlineRank(points,t,d){
+ const u=new URL(ONLINE_BASE);u.searchParams.set('select','id');u.searchParams.set('track','eq.'+t);u.searchParams.set('difficulty','eq.'+d);u.searchParams.set('score','gt.'+points);
+ const response=await fetch(u,{method:'HEAD',headers:{...onlineHeaders(),'Prefer':'count=exact'}});
+ if(!response.ok)throw Error('Rangabfrage HTTP '+response.status);
+ const range=response.headers.get('content-range')||'';const countText=range.split('/')[1];const total=countText===undefined||countText==='*'?NaN:Number(countText);
+ if(!Number.isFinite(total))throw Error('Keine vollständige Rangzahl vom Server erhalten');
+ return total+1;
+}
+// Rang vor dem Speichern ist eine Momentaufnahme; nach Speicherung werden alle Ränge erneut abgefragt.
+let rankEpoch=0;
+const rankStates=[];
+
+function makeRankCard(slot,container){
+ let card=container.querySelector('[data-slot="'+slot+'"]');
+ if(!card){card=document.createElement('div');card.className='finish-rank-card';card.dataset.slot=slot;
+  const title=document.createElement('div');title.className='rank-title';title.textContent=mode==='versus'?'🏁 SPIELER '+slot:'🏁 ZIEL ERREICHT';
+  const number=document.createElement('div');number.className='rank-number';number.textContent='…';
+  const note=document.createElement('div');note.className='rank-note';card.append(title,number,note);container.append(card)}
+ return card;
+}
+
+function paintRank(slot,rank,confirmed,note){
+ rankStates[slot-1]={rank,confirmed,note};
+ for(const id of (mode==='solo'?['finishRankCards','soloRankCards']:['finishRankCards','duelRankCards'])){
+  const card=makeRankCard(slot,$(id));card.classList.remove('confirmed');
+  card.querySelector('.rank-number').textContent=rank===null?'PLATZ –':'PLATZ '+rank;
+  card.querySelector('.rank-note').textContent=note;
+  if(confirmed){void card.offsetWidth;card.classList.add('confirmed')}
+ }
+ const msgs=rankStates.map((v,i)=>v?(mode==='versus'?'Spieler '+(i+1)+': ':'')+(v.rank===null?v.note:'Platz '+v.rank+' ('+(v.confirmed?'bestätigt':'vorläufig')+')'):null).filter(Boolean);
+ $('rankSummary').textContent=msgs.join(' · ');$('duelRanks').textContent=msgs.join(' · ');
+}
+
+function currentPoints(){return mode==='versus'?players.map(p=>p.score):[score]}
+
+async function showProvisionalRanks(){
+ const epoch=rankEpoch;const points=currentPoints();
+ for(let i=0;i<points.length;i++)paintRank(i+1,null,false,'Online-Platzierung wird ermittelt …');
+ await Promise.all(points.map(async(pointsValue,i)=>{
+  try{const rank=await fetchOnlineRank(pointsValue,track,level);if(epoch===rankEpoch)paintRank(i+1,rank,false,'Voraussichtlicher Rang · noch nicht gespeichert')}
+  catch(e){if(epoch===rankEpoch)paintRank(i+1,null,false,'Online-Rang derzeit nicht verfügbar')}
+ }));
+}
+
+async function refreshRanksAfterSave(){
+ const epoch=rankEpoch;const points=currentPoints();
+ await Promise.all(points.map(async(pointsValue,i)=>{
+  try{const rank=await fetchOnlineRank(pointsValue,track,level);if(epoch===rankEpoch)paintRank(i+1,rank,!!savedRankSlots.has(i+1),savedRankSlots.has(i+1)?'Online gespeichert · Rang bestätigt':'Aktueller Rang · noch nicht gespeichert')}
+  catch(e){if(epoch===rankEpoch)paintRank(i+1,null,false,'Online-Rang derzeit nicht verfügbar')}
+ }));
+}
+const savedRankSlots=new Set();
+let previousUpload=null;
+
+async function uploadOnlineScore(initials,score,track,difficulty,playTimeSeconds,slot=1){
+ const epoch=rankEpoch;
+ // Supabase sperrt denselben Namen auf derselben Strecke/Schwierigkeit für 15 Sekunden.
+ // Beim Duell warten wir gegebenenfalls, statt den zweiten Datensatz zu verlieren.
+ const now=Date.now(),signature=[initials,track,difficulty].join('|');
+ if(previousUpload&&previousUpload.signature===signature){
+  const wait=Math.max(0,16500-(now-previousUpload.time));
+  if(wait>0){paintRank(slot,null,false,'Online-Speicherung folgt in '+Math.ceil(wait/1000)+' Sekunden …');
+   await new Promise(resolve=>setTimeout(resolve,wait));if(epoch!==rankEpoch)return;}
+ }
+ previousUpload={signature,time:Date.now()};
+ if(!NAME_RULE.test(initials)){paintRank(slot,null,false,'Name für Online-Speicherung ungültig');return}
  try{
   const response=await fetch(ONLINE_RPC,{method:'POST',headers:{...onlineHeaders(),'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({p_initials:initials,p_score:score,p_track:track,p_difficulty:difficulty,p_play_time_seconds:playTimeSeconds})});
   if(!response.ok)throw Error('HTTP '+response.status+': '+(await response.text()).slice(0,160));
-  $('onlineTrack').value=track;$('onlineDifficulty').value=difficulty;onlinePage=0;await loadOnlineScores();
-  $('onlineStatus').textContent='✓ Ergebnis online gespeichert und Rangliste aktualisiert.';
- }catch(err){$('onlineStatus').textContent='Ergebnis nur lokal gespeichert – Online-Übertragung fehlgeschlagen: '+err.message}
+  if(epoch!==rankEpoch)return;
+  savedRankSlots.add(slot);
+  $('onlineTrack').value=track;$('onlineDifficulty').value=difficulty;onlinePage=0;
+  await Promise.all([loadOnlineScores(),refreshRanksAfterSave()]);
+  if(epoch===rankEpoch)$('onlineStatus').textContent='✓ Ergebnis online gespeichert; Rangliste aktualisiert.';
+ }catch(err){if(epoch!==rankEpoch)return;paintRank(slot,null,false,'Nur lokal gespeichert – '+(err.message.includes('Bitte vor dem naechsten Eintrag warten')?'15-Sekunden-Sperre der Datenbank':'Online-Übertragung fehlgeschlagen'));$('onlineStatus').textContent='Ergebnis nur lokal gespeichert – Online-Übertragung fehlgeschlagen: '+err.message}
 }
 $('onlineRefresh').addEventListener('click',loadOnlineScores);
 for(const id of ['onlineTrack','onlineDifficulty'])$(id).addEventListener('change',()=>{onlinePage=0;loadOnlineScores()});
@@ -165,4 +1151,6 @@ $('onlinePrev').addEventListener('click',()=>{onlinePage=Math.max(0,onlinePage-1
 $('onlineNext').addEventListener('click',()=>{onlinePage++;loadOnlineScores()});
 loadOnlineScores();
 })();
-</script></body></html>
+  </script>
+ </body>
+</html>
